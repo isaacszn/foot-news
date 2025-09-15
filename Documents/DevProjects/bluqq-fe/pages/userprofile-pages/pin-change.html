@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Change PIN Code</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+        body {
+            background-color: #f5f5f5;
+            color: #000;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 30px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        h1 {
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        .error-message {
+            color: #d00;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+        button {
+            background: #000;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #333;
+        }
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+                margin: 20px auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Change PIN Code</h1>
+        <form id="pinForm">
+            <div class="form-group">
+                <label for="current-pin">Current PIN</label>
+                <input type="password" id="current-pin" placeholder="Enter current 4-digit PIN" maxlength="4" pattern="\d{4}">
+                <div class="error-message" id="current-pin-error">Please enter your current 4-digit PIN</div>
+            </div>
+            <div class="form-group">
+                <label for="new-pin">New PIN</label>
+                <input type="password" id="new-pin" placeholder="Enter new 4-digit PIN" maxlength="4" pattern="\d{4}">
+                <div class="error-message" id="new-pin-error">PIN must be 4 digits and different from current PIN</div>
+            </div>
+            <div class="form-group">
+                <label for="confirm-pin">Confirm New PIN</label>
+                <input type="password" id="confirm-pin" placeholder="Confirm new 4-digit PIN" maxlength="4" pattern="\d{4}">
+                <div class="error-message" id="confirm-pin-error">PINs don't match</div>
+            </div>
+            <button type="submit" id="submitBtn" disabled>Update PIN</button>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('pinForm');
+            const currentPin = document.getElementById('current-pin');
+            const newPin = document.getElementById('new-pin');
+            const confirmPin = document.getElementById('confirm-pin');
+            const submitBtn = document.getElementById('submitBtn');
+            const errorMessages = {
+                current: document.getElementById('current-pin-error'),
+                new: document.getElementById('new-pin-error'),
+                confirm: document.getElementById('confirm-pin-error')
+            };
+
+            // Validate inputs in real-time
+            [currentPin, newPin, confirmPin].forEach(input => {
+                input.addEventListener('input', validateForm);
+            });
+
+            function validateForm() {
+                let isValid = true;
+
+                // Validate current PIN
+                if (currentPin.value.length !== 4 || !/^\d+$/.test(currentPin.value)) {
+                    errorMessages.current.style.display = 'block';
+                    isValid = false;
+                } else {
+                    errorMessages.current.style.display = 'none';
+                }
+
+                // Validate new PIN
+                if (newPin.value.length !== 4 || !/^\d+$/.test(newPin.value) || newPin.value === currentPin.value) {
+                    errorMessages.new.style.display = 'block';
+                    isValid = false;
+                } else {
+                    errorMessages.new.style.display = 'none';
+                }
+
+                // Validate confirm PIN
+                if (confirmPin.value !== newPin.value) {
+                    errorMessages.confirm.style.display = 'block';
+                    isValid = false;
+                } else {
+                    errorMessages.confirm.style.display = 'none';
+                }
+
+                submitBtn.disabled = !isValid;
+                return isValid;
+            }
+
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                if (validateForm()) {
+                    // Simulate API call
+                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Updating...';
+                    submitBtn.disabled = true;
+                    
+                    setTimeout(() => {
+                        alert('PIN successfully updated!');
+                        form.reset();
+                        submitBtn.innerHTML = 'Update PIN';
+                        submitBtn.disabled = true;
+                    }, 1500);
+                }
+            });
+
+            // Make PIN fields numeric only
+            [currentPin, newPin, confirmPin].forEach(input => {
+                input.addEventListener('keypress', function(e) {
+                    if (e.key < '0' || e.key > '9') {
+                        e.preventDefault();
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

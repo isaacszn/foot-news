@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beneficiary Management</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        header {
+            margin-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #000;
+        }
+        
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 20px;
+            gap: 5px;
+        }
+        
+        .tab {
+            padding: 8px 16px;
+            cursor: pointer;
+            font-weight: 500;
+            background: none;
+            border: none;
+            outline: none;
+            position: relative;
+            color: #666;
+            border-radius: 4px 4px 0 0;
+        }
+        
+        .tab.active {
+            color: #000;
+            font-weight: 600;
+            background-color: #f0f0f0;
+        }
+        
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: #000;
+        }
+        
+        .search-container {
+            position: relative;
+            margin-bottom: 25px;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 12px 15px;
+            padding-left: 40px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            background-color: #fff;
+            color: #333;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #777;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .section-title::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background-color: #ddd;
+            margin-left: 15px;
+        }
+        
+        .beneficiary-list {
+            margin-bottom: 30px;
+        }
+        
+        .beneficiary-item {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 15px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .beneficiary-item:hover {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transform: translateY(-1px);
+        }
+        
+        .beneficiary-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+        
+        .beneficiary-name {
+            font-weight: 600;
+            font-size: 16px;
+            color: #000;
+        }
+        
+        .beneficiary-time {
+            font-size: 14px;
+            color: #777;
+        }
+        
+        .beneficiary-project {
+            font-size: 15px;
+            margin-bottom: 8px;
+            color: #444;
+        }
+        
+        .beneficiary-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .status {
+            font-size: 14px;
+            font-weight: 500;
+            padding: 3px 8px;
+            border-radius: 4px;
+        }
+        
+        .status-completed {
+            color: #000;
+            background-color: #f0f0f0;
+        }
+        
+        .status-progress {
+            color: #000;
+            background-color: #e8e8e8;
+        }
+        
+        .status-disputed {
+            color: #000;
+            background-color: #e0e0e0;
+        }
+        
+        .beneficiary-amount {
+            font-weight: 600;
+            color: #000;
+        }
+        
+        .add-button {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background-color: #000;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            margin-top: 20px;
+        }
+        
+        .add-button:hover {
+            background-color: #333;
+        }
+        
+        .crypto-address {
+            font-family: monospace;
+            font-size: 14px;
+            color: #555;
+            margin-top: 5px;
+            word-break: break-all;
+        }
+        
+        .crypto-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            background-color: #f0f0f0;
+            color: #000;
+            font-size: 12px;
+            margin-left: 8px;
+        }
+        
+        .no-results {
+            text-align: center;
+            padding: 20px;
+            color: #777;
+            font-style: italic;
+        }
+        
+        @media (max-width: 600px) {
+            .tabs {
+                flex-wrap: wrap;
+            }
+            
+            .tab {
+                flex: 1;
+                text-align: center;
+                padding: 8px 5px;
+                font-size: 14px;
+            }
+            
+            .beneficiary-header {
+                flex-direction: column;
+            }
+            
+            .beneficiary-time {
+                margin-top: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Beneficiaries</h1>
+        <div class="tabs">
+            <button class="tab active" data-tab="escrow">Escrow</button>
+            <button class="tab" data-tab="fiat">Fiat</button>
+            <button class="tab" data-tab="crypto">Crypto</button>
+        </div>
+    </header>
+    
+    <div class="search-container">
+        <span class="search-icon"><i class="fas fa-search"></i></span>
+        <input type="text" class="search-input" placeholder="Search beneficiaries...">
+    </div>
+    
+    <div class="beneficiary-sections">
+        <div class="section">
+            <h2 class="section-title">RECENT</h2>
+            <div class="beneficiary-list" id="recent-list">
+                <!-- Recent beneficiaries will be populated by JavaScript -->
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2 class="section-title">ALL CONTACTS</h2>
+            <div class="beneficiary-list" id="contacts-list">
+                <!-- All contacts will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+    
+    <button class="add-button">+ Add New Beneficiary</button>
+
+    <script>
+        // Sample beneficiary data for different payment types
+        const beneficiaries = {
+            escrow: {
+                recent: [
+                    {
+                        name: "John Smith",
+                        time: "2 days ago",
+                        project: "Web Development Service",
+                        status: "completed",
+                        amount: "$1,200"
+                    },
+                    {
+                        name: "Sarah Johnson",
+                        time: "1 week ago",
+                        project: "Graphic Design Project",
+                        status: "progress",
+                        amount: "$800"
+                    },
+                    {
+                        name: "Mike Chen",
+                        time: "2 weeks ago",
+                        project: "Mobile App Development",
+                        status: "disputed",
+                        amount: "$2,500"
+                    }
+                ],
+                contacts: [
+                    {
+                        name: "Emma Davis",
+                        time: "1 month ago",
+                        project: "Content Writing Service",
+                        status: "completed",
+                        amount: "$450"
+                    },
+                    {
+                        name: "Alex Rodriguez",
+                        time: "2 months ago",
+                        project: "Digital Marketing Campaign",
+                        status: "completed",
+                        amount: "$1,800"
+                    }
+                ]
+            },
+            fiat: {
+                recent: [
+                    {
+                        name: "Robert Williams",
+                        time: "3 days ago",
+                        project: "Consultation Services",
+                        status: "completed",
+                        amount: "$950"
+                    },
+                    {
+                        name: "Lisa Brown",
+                        time: "1 week ago",
+                        project: "UI/UX Design",
+                        status: "progress",
+                        amount: "$1,100"
+                    }
+                ],
+                contacts: [
+                    {
+                        name: "James Wilson",
+                        time: "3 weeks ago",
+                        project: "Business Plan Development",
+                        status: "completed",
+                        amount: "$2,200"
+                    }
+                ]
+            },
+            crypto: {
+                recent: [
+                    {
+                        name: "Crypto Payments Inc.",
+                        time: "1 day ago",
+                        project: "Blockchain Development",
+                        status: "progress",
+                        amount: "0.5 BTC",
+                        address: "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa",
+                        currency: "BTC"
+                    },
+                    {
+                        name: "Ethereum Foundation",
+                        time: "4 days ago",
+                        project: "Smart Contract Audit",
+                        status: "completed",
+                        amount: "2.5 ETH",
+                        address: "0x742d35Cc6634C0532925a3b844Bc454e4438f44e",
+                        currency: "ETH"
+                    }
+                ],
+                contacts: [
+                    {
+                        name: "Binance Wallet",
+                        time: "2 weeks ago",
+                        project: "Exchange Integration",
+                        status: "completed",
+                        amount: "1250 USDT",
+                        address: "0x4Fabb145d64652a948d72533023f6E7A623C7C53",
+                        currency: "USDT"
+                    },
+                    {
+                        name: "Crypto Consulting LLC",
+                        time: "1 month ago",
+                        project: "Advisory Services",
+                        status: "progress",
+                        amount: "5.25 ETH",
+                        address: "0x2C1C5b1059bC9cC9dC6aB87764bD2518d5C66498",
+                        currency: "ETH"
+                    }
+                ]
+            }
+        };
+
+        // Current active tab
+        let activeTab = 'escrow';
+
+        // Function to create beneficiary item HTML
+        function createBeneficiaryItem(beneficiary) {
+            const statusClass = `status-${beneficiary.status}`;
+            const statusSymbol = 
+                beneficiary.status === "completed" ? "✔" : 
+                beneficiary.status === "progress" ? "●" : 
+                beneficiary.status === "disputed" ? "×" : "";
+                
+            const statusText = 
+                beneficiary.status === "completed" ? "Completed" : 
+                beneficiary.status === "progress" ? "In Progress" : 
+                beneficiary.status === "disputed" ? "Disputed" : "";
+            
+            // Check if it's a crypto beneficiary
+            const isCrypto = beneficiary.currency !== undefined;
+            
+            return `
+                <div class="beneficiary-item">
+                    <div class="beneficiary-header">
+                        <div class="beneficiary-name">
+                            ${beneficiary.name}
+                            ${isCrypto ? `<span class="crypto-badge">${beneficiary.currency}</span>` : ''}
+                        </div>
+                        <div class="beneficiary-time">${beneficiary.time}</div>
+                    </div>
+                    <div class="beneficiary-project">${beneficiary.project}</div>
+                    ${isCrypto ? `<div class="crypto-address">${beneficiary.address}</div>` : ''}
+                    <div class="beneficiary-footer">
+                        <span class="status ${statusClass}">${statusSymbol} ${statusText}</span>
+                        <span class="beneficiary-amount">${beneficiary.amount}</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Function to render beneficiaries based on active tab
+        function renderBeneficiaries() {
+            const recentList = document.getElementById('recent-list');
+            const contactsList = document.getElementById('contacts-list');
+            
+            // Clear existing content
+            recentList.innerHTML = '';
+            contactsList.innerHTML = '';
+            
+            // Get data for active tab
+            const tabData = beneficiaries[activeTab];
+            
+            if (!tabData || (tabData.recent.length === 0 && tabData.contacts.length === 0)) {
+                recentList.innerHTML = '<div class="no-results">No beneficiaries found</div>';
+                return;
+            }
+            
+            // Render recent beneficiaries
+            if (tabData.recent.length > 0) {
+                tabData.recent.forEach(beneficiary => {
+                    recentList.innerHTML += createBeneficiaryItem(beneficiary);
+                });
+            } else {
+                recentList.innerHTML = '<div class="no-results">No recent beneficiaries</div>';
+            }
+            
+            // Render all contacts
+            if (tabData.contacts.length > 0) {
+                tabData.contacts.forEach(beneficiary => {
+                    contactsList.innerHTML += createBeneficiaryItem(beneficiary);
+                });
+            } else {
+                contactsList.innerHTML = '<div class="no-results">No contacts available</div>';
+            }
+        }
+
+        // Tab functionality
+        function setupTabs() {
+            const tabs = document.querySelectorAll('.tab');
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    // Remove active class from all tabs
+                    tabs.forEach(t => t.classList.remove('active'));
+                    
+                    // Add active class to clicked tab
+                    tab.classList.add('active');
+                    
+                    // Update active tab
+                    activeTab = tab.dataset.tab;
+                    
+                    // Render beneficiaries for the selected tab
+                    renderBeneficiaries();
+                });
+            });
+        }
+
+        // Search functionality
+        function setupSearch() {
+            const searchInput = document.querySelector('.search-input');
+            
+            searchInput.addEventListener('input', (e) => {
+                const searchTerm = e.target.value.toLowerCase();
+                
+                // Filter both recent and contact lists
+                filterBeneficiaries(searchTerm, 'recent-list', beneficiaries[activeTab].recent);
+                filterBeneficiaries(searchTerm, 'contacts-list', beneficiaries[activeTab].contacts);
+            });
+        }
+        
+        function filterBeneficiaries(searchTerm, listId, originalList) {
+            const list = document.getElementById(listId);
+            list.innerHTML = '';
+            
+            const filtered = originalList.filter(beneficiary => 
+                beneficiary.name.toLowerCase().includes(searchTerm) || 
+                beneficiary.project.toLowerCase().includes(searchTerm) ||
+                (beneficiary.address && beneficiary.address.toLowerCase().includes(searchTerm))
+            );
+            
+            if (filtered.length === 0) {
+                list.innerHTML = `<div class="no-results">No beneficiaries found</div>`;
+            } else {
+                filtered.forEach(beneficiary => {
+                    list.innerHTML += createBeneficiaryItem(beneficiary);
+                });
+            }
+        }
+
+        // Add new beneficiary functionality
+        function setupAddButton() {
+            const addButton = document.querySelector('.add-button');
+            
+            addButton.addEventListener('click', () => {
+                // In a real application, this would open a form modal
+                // For now, we'll show a simple prompt
+                const beneficiaryType = activeTab.charAt(0).toUpperCase() + activeTab.slice(1);
+                alert(`Add New ${beneficiaryType} Beneficiary functionality would open here`);
+            });
+        }
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', () => {
+            renderBeneficiaries();
+            setupTabs();
+            setupSearch();
+            setupAddButton();
+        });
+    </script>
+</body>
+</html>

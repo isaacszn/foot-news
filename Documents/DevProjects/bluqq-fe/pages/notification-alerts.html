@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bluqq - Notifications</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        :root {
+            --black: #000;
+            --white: #fff;
+            --light-gray: #f5f5f5;
+            --medium-gray: #e0e0e0;
+            --dark-gray: #333;
+            --text-gray: #666;
+            --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        body {
+            background-color: var(--light-gray);
+            color: var(--black);
+            line-height: 1.6;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--medium-gray);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--black);
+            display: flex;
+            align-items: center;
+        }
+
+        .logo i {
+            margin-right: 10px;
+        }
+
+        .user-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .notification-btn, .user-profile {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--black);
+            cursor: pointer;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--black);
+            color: var(--white);
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .notification-container {
+            position: relative;
+        }
+
+        .page-title {
+            font-size: 28px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .filter-bar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            border: 1px solid var(--medium-gray);
+            border-radius: 20px;
+            background: var(--white);
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .filter-btn.active, .filter-btn:hover {
+            background: var(--black);
+            color: var(--white);
+        }
+
+        .notification-list {
+            background: var(--white);
+            border-radius: 12px;
+            border: 1px solid var(--medium-gray);
+            overflow: hidden;
+        }
+
+        .notification-item {
+            display: flex;
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--medium-gray);
+            transition: background 0.3s;
+        }
+
+        .notification-item:last-child {
+            border-bottom: none;
+        }
+
+        .notification-item.unread {
+            background: var(--light-gray);
+        }
+
+        .notification-item:hover {
+            background: var(--light-gray);
+        }
+
+        .notification-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--light-gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .notification-desc {
+            font-size: 14px;
+            color: var(--text-gray);
+            margin-bottom: 6px;
+        }
+
+        .notification-time {
+            font-size: 12px;
+            color: var(--text-gray);
+        }
+
+        .notification-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .action-btn {
+            padding: 4px 10px;
+            border: 1px solid var(--medium-gray);
+            border-radius: 4px;
+            background: var(--white);
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s;
+        }
+
+        .action-btn:hover {
+            background: var(--black);
+            color: var(--white);
+        }
+
+        .mark-all-read {
+            text-align: right;
+            margin-top: 20px;
+        }
+
+        .mark-read-btn {
+            background: none;
+            border: none;
+            color: var(--black);
+            text-decoration: underline;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-gray);
+        }
+
+        .empty-state i {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .dropdown {
+            position: absolute;
+            top: 50px;
+            right: 0;
+            width: 350px;
+            background: var(--white);
+            border: 1px solid var(--medium-gray);
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            z-index: 1000;
+            display: none;
+        }
+
+        .dropdown-header {
+            padding: 15px;
+            border-bottom: 1px solid var(--medium-gray);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .dropdown-title {
+            font-weight: 600;
+        }
+
+        .dropdown-notifications {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .dropdown-item {
+            padding: 12px 15px;
+            border-bottom: 1px solid var(--light-gray);
+            display: flex;
+            align-items: center;
+        }
+
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-item.unread {
+            background: var(--light-gray);
+        }
+
+        .dropdown-icon {
+            margin-right: 10px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: var(--light-gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .dropdown-content {
+            flex: 1;
+        }
+
+        .dropdown-desc {
+            font-size: 13px;
+            margin-bottom: 4px;
+        }
+
+        .dropdown-time {
+            font-size: 11px;
+            color: var(--text-gray);
+        }
+
+        .dropdown-footer {
+            padding: 10px 15px;
+            text-align: center;
+            border-top: 1px solid var(--medium-gray);
+        }
+
+        .view-all-link {
+            color: var(--black);
+            text-decoration: underline;
+            font-size: 13px;
+        }
+
+        @media (max-width: 768px) {
+            .dropdown {
+                width: 300px;
+                right: -20px;
+            }
+            
+            .filter-bar {
+                overflow-x: auto;
+                padding-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-bell"></i>
+                <span>Bluqq Notifications</span>
+            </div>
+            <div class="user-actions">
+                <div class="notification-container">
+                    <div class="notification-btn" onclick="toggleDropdown()">
+                        <i class="fas fa-bell"></i>
+                        <div class="notification-badge">3</div>
+                    </div>
+                    <div class="dropdown" id="notificationDropdown">
+                        <div class="dropdown-header">
+                            <div class="dropdown-title">Notifications</div>
+                            <div class="mark-read-btn" onclick="markAllDropdownRead()">Mark all read</div>
+                        </div>
+                        <div class="dropdown-notifications">
+                            <div class="dropdown-item unread">
+                                <div class="dropdown-icon">
+                                    <i class="fas fa-money-bill-wave"></i>
+                                </div>
+                                <div class="dropdown-content">
+                                    <div class="dropdown-desc">Your deposit of ₦50,000 was successful</div>
+                                    <div class="dropdown-time">10 minutes ago</div>
+                                </div>
+                            </div>
+                            <div class="dropdown-item unread">
+                                <div class="dropdown-icon">
+                                    <i class="fas fa-exchange-alt"></i>
+                                </div>
+                                <div class="dropdown-content">
+                                    <div class="dropdown-desc">P2P trade with @DavidSmith completed</div>
+                                    <div class="dropdown-time">45 minutes ago</div>
+                                </div>
+                            </div>
+                            <div class="dropdown-item">
+                                <div class="dropdown-icon">
+                                    <i class="fas fa-coins"></i>
+                                </div>
+                                <div class="dropdown-content">
+                                    <div class="dropdown-desc">You received 250 reward points</div>
+                                    <div class="dropdown-time">2 hours ago</div>
+                                </div>
+                            </div>
+                            <div class="dropdown-item">
+                                <div class="dropdown-icon">
+                                    <i class="fas fa-shield-alt"></i>
+                                </div>
+                                <div class="dropdown-content">
+                                    <div class="dropdown-desc">New login from Lagos, Nigeria</div>
+                                    <div class="dropdown-time">5 hours ago</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="dropdown-footer">
+                            <a href="#" class="view-all-link">View All Notifications</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="user-profile">
+                    <i class="fas fa-user"></i>
+                </div>
+            </div>
+        </header>
+
+        <div class="page-title">
+            <i class="fas fa-bell"></i> Notifications
+        </div>
+
+        <div class="filter-bar">
+            <button class="filter-btn active" onclick="filterNotifications('all')">All</button>
+            <button class="filter-btn" onclick="filterNotifications('unread')">Unread</button>
+            <button class="filter-btn" onclick="filterNotifications('transactions')">Transactions</button>
+            <button class="filter-btn" onclick="filterNotifications('security')">Security</button>
+            <button class="filter-btn" onclick="filterNotifications('rewards')">Rewards</button>
+            <button class="filter-btn" onclick="filterNotifications('p2p')">P2P Trading</button>
+        </div>
+
+        <div class="notification-list">
+            <div class="notification-item unread">
+                <div class="notification-icon">
+                    <i class="fas fa-money-bill-wave"></i>
+                </div>
+                <div class="notification-content">
+                    <div class="notification-title">Deposit Successful</div>
+                    <div class="notification-desc">Your deposit of ₦50,000 was successful. The funds are now available in your Bluqq wallet.</div>
+                    <div class="notification-time">10 minutes ago</div>
+                    <div class="notification-actions">
+                        <button class="action-btn" onclick="markAsRead(this)">Mark as read</button>
+                        <button class="action-btn">View transaction</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="notification-item unread">
+                <div class="notification-icon">
+                    <i class="fas fa-exchange-alt"></i>
+                </div>
+                <div class="notification-content">
+                    <div class="notification-title">P2P Trade Completed</div>
+                    <div class="notification-desc">Your P2P trade with @DavidSmith has been completed successfully. 0.025 BTC has been added to your wallet.</div>
+                    <div class="notification-time">45 minutes ago</div>
+                    <div class="notification-actions">
+                        <button class="action-btn" onclick="markAsRead(this)">Mark as read</button>
+                        <button class="action-btn">View trade details</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="notification-item">
+                <div class="notification-icon">
+                    <i class="fas fa-coins"></i>
+                </div>
+                <div class="notification-content">
+                    <div class="notification-title">Reward Points Received</div>
+                    <div class="notification-desc">You've received 250 reward points for completing your 7th P2P trade this week.</div>
+                    <div class="notification-time">2 hours ago</div>
+                    <div class="notification-actions">
+                        <button class="action-btn">Redeem points</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="notification-item">
+                <div class="notification-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <div class="notification-content">
+                    <div class="notification-title">New Login Detected</div>
+                    <div class="notification-desc">New login from Lagos, Nigeria. If this wasn't you, please secure your account immediately.</div>
+                    <div class="notification-time">5 hours ago</div>
+                    <div class="notification-actions">
+                        <button class="action-btn">Secure account</button>
+                        <button class="action-btn">View activity</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="notification-item">
+                <div class="notification-icon">
+                    <i class="fas fa-handshake"></i>
+                </div>
+                <div class="notification-content">
+                    <div class="notification-title">Escrow Released</div>
+                    <div class="notification-desc">Escrow funds for your trade with @SarahJohnson have been released. The transaction is now complete.</div>
+                    <div class="notification-time">Yesterday</div>
+                    <div class="notification-actions">
+                        <button class="action-btn">View details</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="notification-item">
+                <div class="notification-icon">
+                    <i class="fas fa-exchange-alt"></i>
+                </div>
+                <div class="notification-content">
+                    <div class="notification-title">Crypto Conversion Complete</div>
+                    <div class="notification-desc">Your conversion of 0.5 ETH to USDT has been completed at a rate of 1 ETH = $1,850.</div>
+                    <div class="notification-time">2 days ago</div>
+                    <div class="notification-actions">
+                        <button class="action-btn">View transaction</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mark-all-read">
+            <button class="mark-read-btn" onclick="markAllAsRead()">Mark all as read</button>
+        </div>
+    </div>
+
+    <script>
+        // Toggle dropdown
+        function toggleDropdown() {
+            const dropdown = document.getElementById('notificationDropdown');
+            dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const dropdown = document.getElementById('notificationDropdown');
+            const notificationBtn = document.querySelector('.notification-btn');
+            
+            if (!dropdown.contains(event.target) && !notificationBtn.contains(event.target)) {
+                dropdown.style.display = 'none';
+            }
+        });
+
+        // Mark notification as read
+        function markAsRead(button) {
+            const notificationItem = button.closest('.notification-item');
+            notificationItem.classList.remove('unread');
+            updateBadgeCount();
+        }
+
+        // Mark all as read
+        function markAllAsRead() {
+            document.querySelectorAll('.notification-item.unread').forEach(item => {
+                item.classList.remove('unread');
+            });
+            updateBadgeCount();
+        }
+
+        // Mark all dropdown notifications as read
+        function markAllDropdownRead() {
+            document.querySelectorAll('.dropdown-item.unread').forEach(item => {
+                item.classList.remove('unread');
+            });
+            updateBadgeCount();
+        }
+
+        // Update badge count
+        function updateBadgeCount() {
+            const unreadCount = document.querySelectorAll('.notification-item.unread').length;
+            const badge = document.querySelector('.notification-badge');
+            
+            if (unreadCount > 0) {
+                badge.textContent = unreadCount;
+                badge.style.display = 'flex';
+            } else {
+                badge.style.display = 'none';
+            }
+        }
+
+        // Filter notifications
+        function filterNotifications(type) {
+            // Remove active class from all buttons
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+            
+            // In a real app, this would filter the notifications
+            // For this example, we'll just show a message
+            if (type !== 'all') {
+                alert(`Filtering by: ${type}`);
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            updateBadgeCount();
+        });
+    </script>
+</body>
+</html>

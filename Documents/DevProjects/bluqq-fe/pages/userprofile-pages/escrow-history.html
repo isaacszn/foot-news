@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escrow History</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+        body {
+            background-color: #f5f5f5;
+            color: #000;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 30px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        h1 {
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        .filter-bar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        select, input {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        button {
+            background: #000;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        th {
+            background: #f9f9f9;
+            font-weight: 600;
+        }
+        .status {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .completed {
+            background: #e6f7ee;
+            color: #008000;
+        }
+        .pending {
+            background: #fff8e6;
+            color: #cc9900;
+        }
+        .disputed {
+            background: #fee;
+            color: #d00;
+        }
+        .view-btn {
+            background: none;
+            color: #000;
+            border: 1px solid #000;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        @media (max-width: 768px) {
+            table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+            .filter-bar {
+                flex-direction: column;
+            }
+            select, input, button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Escrow History</h1>
+        
+        <div class="filter-bar">
+            <select>
+                <option>All Status</option>
+                <option>Completed</option>
+                <option>Pending</option>
+                <option>Disputed</option>
+            </select>
+            <select>
+                <option>All Coins</option>
+                <option>BTC</option>
+                <option>ETH</option>
+                <option>USDT</option>
+                <option>BNB</option>
+            </select>
+            <input type="date" placeholder="From Date">
+            <input type="date" placeholder="To Date">
+            <button>Filter</button>
+        </div>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Transaction ID</th>
+                    <th>Date</th>
+                    <th>Coin</th>
+                    <th>Amount</th>
+                    <th>Value (₦)</th>
+                    <th>Counterparty</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>ESC-78945612</td>
+                    <td>2025-07-15</td>
+                    <td>BTC</td>
+                    <td>0.005 BTC</td>
+                    <td>₦250,000</td>
+                    <td>user1234</td>
+                    <td><span class="status completed">Completed</span></td>
+                    <td><button class="view-btn">View</button></td>
+                </tr>
+                <tr>
+                    <td>ESC-78945613</td>
+                    <td>2025-07-16</td>
+                    <td>ETH</td>
+                    <td>0.8 ETH</td>
+                    <td>₦450,000</td>
+                    <td>user5678</td>
+                    <td><span class="status completed">Completed</span></td>
+                    <td><button class="view-btn">View</button></td>
+                </tr>
+                <tr>
+                    <td>ESC-78945614</td>
+                    <td>2025-07-17</td>
+                    <td>USDT</td>
+                    <td>200 USDT</td>
+                    <td>₦240,000</td>
+                    <td>user9012</td>
+                    <td><span class="status pending">Pending</span></td>
+                    <td><button class="view-btn">View</button></td>
+                </tr>
+                <tr>
+                    <td>ESC-78945615</td>
+                    <td>2025-07-18</td>
+                    <td>BNB</td>
+                    <td>1.2 BNB</td>
+                    <td>₦180,000</td>
+                    <td>user3456</td>
+                    <td><span class="status disputed">Disputed</span></td>
+                    <td><button class="view-btn">View</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bluqq Escrow - Create New Escrow</title>
+    <link rel="stylesheet" href="../assets/css/escrow.css">
+</head>
+<body>
+    <nav>
+        <a href="dashboard.html" class="back-btn">←</a>
+        <div class="page-title">Bluqq Escrow</div>
+        <div class="nav-spacer"></div>
+    </nav>
+
+    <div class="escrow-container">
+        <div class="page-subtitle">
+            Create New Escrow<br>
+            Secure transactions for any online service or goods worldwide
+        </div>
+
+        <!-- Escrow Details -->
+        <div class="form-section">
+            <h3>
+                <span class="section-icon">📋</span>
+                Escrow Details
+            </h3>
+            <div class="form-group">
+                <label for="escrow-type" class="required">Escrow Type</label>
+                <select id="escrow-type" class="form-select">
+                    <option value="">Select escrow type</option>
+                    <option value="goods">Goods & Services</option>
+                    <option value="freelance">Freelance Work</option>
+                    <option value="real-estate">Real Estate</option>
+                    <option value="digital">Digital Assets</option>
+                </select>
+                <div class="error-message">Please select an escrow type</div>
+            </div>
+            <div class="form-group">
+                <label for="transaction-title" class="required">Transaction Title</label>
+                <input type="text" id="transaction-title" class="form-input" placeholder="Enter transaction description">
+                <div class="error-message">Please enter a transaction title</div>
+            </div>
+            <div class="form-group">
+                <label for="total-amount" class="required">Total Amount</label>
+                <div class="amount-input-wrapper">
+                    <input type="number" id="total-amount" class="form-input" placeholder="0.00" step="0.01" min="0.01">
+                    <select id="currency-select" class="currency-symbol">
+                        <option value="USD">USD</option>
+                        <option value="NGN">NGN</option>
+                    </select>
+                </div>
+                <div class="error-message">Please enter a valid amount</div>
+            </div>
+        </div>
+
+        <!-- Parties Information -->
+        <div class="form-section">
+            <h3>
+                <span class="section-icon">👥</span>
+                Parties Information
+            </h3>
+            <div class="form-group">
+                <label class="required">Your Role</label>
+                <div class="radio-group">
+                    <div class="radio-option">
+                        <input type="radio" id="buyer" name="role" value="buyer">
+                        <label for="buyer">Buyer</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="seller" name="role" value="seller">
+                        <label for="seller">Seller</label>
+                    </div>
+                </div>
+                <div class="error-message">Please select your role</div>
+            </div>
+            <div class="form-group">
+                <label for="other-party-email" class="required">Other Party Email</label>
+                <input type="email" id="other-party-email" class="form-input" placeholder="Enter other party's email">
+                <div class="error-message">Please enter a valid email address</div>
+            </div>
+            <div class="form-group">
+                <label for="your-phone" class="required">Your Phone Number</label>
+                <input type="tel" id="your-phone" class="form-input" placeholder="Enter your phone number">
+                <div class="error-message">Please enter your phone number</div>
+            </div>
+            <div class="form-group">
+                <label for="other-party-phone">Other Party Phone Number</label>
+                <input type="tel" id="other-party-phone" class="form-input" placeholder="Enter other party's phone number">
+            </div>
+            <div class="form-group">
+                <label for="other-party-account">Other Party Bluqq Account</label>
+                <input type="text" id="other-party-account" class="form-input" placeholder="Enter Bluqq account number">
+            </div>
+        </div>
+
+        <!-- Payment Settings -->
+        <div class="form-section">
+            <h3>
+                <span class="section-icon">💳</span>
+                Payment Settings
+            </h3>
+            <div class="form-group">
+                <label>Payment Method</label>
+                <div class="payment-method selected" onclick="selectPaymentMethod(this)">
+                    <div class="payment-icon">🏦</div>
+                    <div class="payment-info">
+                        <div class="payment-name">Bank Transfer</div>
+                        <div class="payment-details">Direct bank transfer</div>
+                    </div>
+                    <div class="radio-check"></div>
+                </div>
+                <div class="payment-method" onclick="selectPaymentMethod(this)">
+                    <div class="payment-icon">💳</div>
+                    <div class="payment-info">
+                        <div class="payment-name">Debit Card</div>
+                        <div class="payment-details">Visa, MasterCard, Verve</div>
+                    </div>
+                    <div class="radio-check"></div>
+                </div>
+                <div class="payment-method" onclick="selectPaymentMethod(this)">
+                    <div class="payment-icon">🅿️</div>
+                    <div class="payment-info">
+                        <div class="payment-name">PayPal</div>
+                        <div class="payment-details">Secure PayPal payments</div>
+                    </div>
+                    <div class="radio-check"></div>
+                </div>
+                <div class="payment-method" onclick="selectPaymentMethod(this)">
+                    <div class="payment-icon">₿</div>
+                    <div class="payment-info">
+                        <div class="payment-name">Bitcoin</div>
+                        <div class="payment-details">Cryptocurrency payments</div>
+                    </div>
+                    <div class="radio-check"></div>
+                </div>
+            </div>
+            <div class="checkbox-group">
+                <input type="checkbox" id="batch-payments">
+                <label for="batch-payments">Enable batch payments</label>
+            </div>
+        </div>
+
+        <!-- Timeline & Conditions -->
+        <div class="form-section">
+            <h3>
+                <span class="section-icon">⏰</span>
+                Timeline & Conditions
+            </h3>
+            <div class="form-group">
+                <label for="delivery-date" class="required">Delivery/Service Date</label>
+                <input type="date" id="delivery-date" class="form-input">
+                <div class="error-message">Please select a delivery date</div>
+            </div>
+            <div class="form-group">
+                <label for="auto-release">Auto-release Time</label>
+                <select id="auto-release" class="form-select">
+                    <option value="24">24 hours after delivery</option>
+                    <option value="48">48 hours after delivery</option>
+                    <option value="72">72 hours after delivery</option>
+                    <option value="168">7 days after delivery</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="terms">Terms & Conditions</label>
+                <textarea id="terms" class="form-input" placeholder="Enter specific terms and conditions" rows="4"></textarea>
+            </div>
+        </div>
+
+        <!-- Summary -->
+        <div class="summary">
+            <h3>
+                <span class="section-icon">📊</span>
+                Escrow Summary
+            </h3>
+            <div class="summary-row">
+                <span>Escrow Amount:</span>
+                <span id="summary-amount">$0.00</span>
+            </div>
+            <div class="summary-row">
+                <span>Bluqq Fee (2.5%):</span>
+                <span id="summary-fee">$0.00</span>
+            </div>
+            <div class="summary-row total">
+                <span>Total:</span>
+                <span id="summary-total">$0.00</span>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button class="create-btn" onclick="createEscrow()">Create Escrow</button>
+        </div>
+    </div>
+
+    <script src="../assets/scripts/escrow.js"></script>
+</body>
+</html>
+
+
+

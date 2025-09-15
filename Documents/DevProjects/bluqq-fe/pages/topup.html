@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bluqq - Top Up</title>
+    <link rel="stylesheet" href="../assets/css/topup.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <a href="dashboard.html">
+            <button class="back-btn">
+                <div style="color: #000000; font-size: 18px; font-weight: bold;">←</div>
+            </button>
+        </a>
+        <div class="page-title">Top Up Wallet</div>
+        <div class="nav-spacer"></div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="topup-container">
+        <!-- Success Message -->
+        <div class="success-message" id="successMessage">
+            ✅ Top up successful! Your balance has been updated.
+        </div>
+
+        <!-- Currency Toggle -->
+        <div class="currency-toggle">
+            <button class="currency-btn active" id="usdBtn" onclick="switchCurrency('USD')">USD ($)</button>
+            <button class="currency-btn" id="ngnBtn" onclick="switchCurrency('NGN')">NGN (₦)</button>
+        </div>
+
+        <!-- Current Balance -->
+        <div class="current-balance">
+            <h3>Current Balance</h3>
+            <div class="amount">
+                <span id="currencySymbol">$</span><span id="currentBalance">10,000</span>.00
+            </div>
+        </div>
+
+        <!-- Top Up Amount -->
+        <div class="topup-amount">
+            <h3>Enter Amount</h3>
+            <div class="input-wrapper">
+                <div class="currency-symbol" id="inputCurrencySymbol">$</div>
+                <input type="number" class="amount-input" id="topupAmount" placeholder="0.00" min="1" max="10000" step="0.01">
+            </div>
+            
+            <div class="quick-amounts" id="quickAmounts">
+                <!-- Quick amount buttons will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Payment Methods -->
+        <div class="payment-methods">
+            <h3>Payment Method</h3>
+            
+            <div class="payment-method selected" onclick="selectPaymentMethod(this)">
+                <div class="payment-icon">💳</div>
+                <div class="payment-info">
+                    <div class="payment-name">Credit Card</div>
+                    <div class="payment-details">**** **** **** 1234</div>
+                </div>
+                <div class="radio-check"></div>
+            </div>
+
+            <div class="payment-method" onclick="selectPaymentMethod(this)">
+                <div class="payment-icon">🏦</div>
+                <div class="payment-info">
+                    <div class="payment-name">Bank Transfer</div>
+                    <div class="payment-details">Deutsche Bank ****5678</div>
+                </div>
+                <div class="radio-check"></div>
+            </div>
+
+            <div class="payment-method" onclick="selectPaymentMethod(this)">
+                <div class="payment-icon">📱</div>
+                <div class="payment-info">
+                    <div class="payment-name">PayPal</div>
+                    <div class="payment-details">isaac@example.com</div>
+                </div>
+                <div class="radio-check"></div>
+            </div>
+
+            <div class="payment-method" onclick="selectPaymentMethod(this)">
+                <div class="payment-icon">₿</div>
+                <div class="payment-info">
+                    <div class="payment-name">Bitcoin</div>
+                    <div class="payment-details">BTC Wallet</div>
+                </div>
+                <div class="radio-check"></div>
+            </div>
+        </div>
+
+        <!-- Summary -->
+        <div class="summary">
+            <h3>Transaction Summary</h3>
+            <div class="summary-row">
+                <span>Amount:</span>
+                <span><span id="summarySymbol">$</span><span id="summaryAmount">0.00</span></span>
+            </div>
+            <div class="summary-row">
+                <span>Processing Fee:</span>
+                <span><span id="feeSymbol">$</span><span id="summaryFee">0.00</span></span>
+            </div>
+            <div class="summary-row total">
+                <span>Total:</span>
+                <span><span id="totalSymbol">$</span><span id="summaryTotal">0.00</span></span>
+            </div>
+        </div>
+
+        <!-- Top Up Button -->
+        <button class="topup-btn" id="topupButton" onclick="processTopUp()" disabled>
+            <span id="buttonText">Enter Amount to Continue</span>
+        </button>
+    </div>
+
+    <script src="../assets/scripts/topup.js"></script>
+</body>
+</html>

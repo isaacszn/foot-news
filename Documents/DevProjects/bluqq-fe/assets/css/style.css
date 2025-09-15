@@ -1,0 +1,90 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Fonts */
+@font-face {
+  font-family: Space Grotesk;
+  src: url(/assets/fonts/Space_Grotesk/static/SpaceGrotesk-Regular.ttf);
+}
+
+/* CSS variables */
+:root {
+  /* Fonts */
+  --ff: Space Grotesk, sans-serif;
+  /* Colors */
+  --primary: #0F172A;
+  --accent: #14B8A6;
+  --background: #F8FAFC;
+  --error: #EF4444;
+  --text: #1E293B;
+  /* Spacing scale */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+}
+
+body {
+  font: 1rem var(--ff), sans-serif;
+  background: var(--background);
+  color: var(--text);
+  width: 100%;
+}
+
+main {
+  margin: var(--space-lg);
+}
+
+main img {
+  width: 250px;
+  height: 250px;
+  margin: var(--space-lg);
+  border: 1.2px solid black;
+  border-radius: 5px;
+}
+
+main h1 {
+  color: var(--primary);
+  width: 95%;
+  text-align: center;
+  margin: var(--space-xl);
+}
+
+p {
+  text-align: center;
+}
+
+.button {
+  width: 100%;
+  padding: 20px;
+  font: inherit;
+  height: 50px;
+  border-radius: 10px;
+  background-color: black;
+  color: white;
+  margin: 30px auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  font-size: 16px;
+  text-decoration: none;
+}
+
+.logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+}
+
+@media screen and (min-width: 481px) {
+  main img {
+    width: 350px;
+    height: 350px;
+  }
+}

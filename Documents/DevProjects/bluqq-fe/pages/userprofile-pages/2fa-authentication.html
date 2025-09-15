@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Two-Factor Authentication</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+        body {
+            background-color: #f5f5f5;
+            color: #000;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 30px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        h1 {
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        .status {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+        .enabled {
+            background: #e6f7ee;
+            color: #008000;
+            border: 1px solid #008000;
+        }
+        .disabled {
+            background: #fee;
+            color: #d00;
+            border: 1px solid #d00;
+        }
+        .setup-2fa {
+            margin-top: 30px;
+        }
+        .qr-code {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .qr-code img {
+            width: 200px;
+            height: 200px;
+            border: 1px solid #ddd;
+            padding: 10px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        button {
+            background: #000;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #333;
+        }
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .backup-codes {
+            margin-top: 30px;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 8px;
+        }
+        .copy-codes {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+        .copy-btn {
+            background: none;
+            color: #000;
+            border: 1px solid #000;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #000;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            z-index: 1000;
+            display: none;
+        }
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+                margin: 20px auto;
+            }
+            .copy-codes {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Two-Factor Authentication</h1>
+        
+        <div class="status">
+            <span>Current Status:</span>
+            <span class="status-badge" id="statusBadge">Enabled</span>
+        </div>
+        
+        <div class="setup-2fa" id="setupSection">
+            <h2>Set Up 2FA</h2>
+            <p>Scan the QR code below with your authenticator app:</p>
+            
+            <div class="qr-code">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=otpauth://totp/MyApp:user@example.com?secret=2FAKEY123456789&issuer=MyApp" alt="QR Code">
+            </div>
+            
+            <p>Or enter this code manually: <strong>2FAKEY123456789</strong></p>
+            
+            <div class="form-group">
+                <label for="verification-code">Enter Verification Code</label>
+                <input type="text" id="verification-code" placeholder="Enter 6-digit code from your app" maxlength="6">
+            </div>
+            
+            <button id="verifyBtn">Verify and Enable 2FA</button>
+        </div>
+        
+        <div class="backup-codes">
+            <h3>Backup Codes</h3>
+            <p>Save these codes in a safe place in case you lose access to your authenticator app:</p>
+            <ul id="backupCodes" style="margin-top: 10px; columns: 2;">
+                <li>ABCD-EFGH-IJKL</li>
+                <li>MNOP-QRST-UVWX</li>
+                <li>YZ12-3456-7890</li>
+                <li>9876-5432-10ZY</li>
+                <li>XWVU-TSRQ-PONM</li>
+            </ul>
+            <div class="copy-codes">
+                <button class="copy-btn" onclick="copyBackupCodes()">
+                    <i class="far fa-copy"></i> Copy All Codes
+                </button>
+                <button class="copy-btn" onclick="downloadBackupCodes()">
+                    <i class="fas fa-download"></i> Download Codes
+                </button>
+                <button class="copy-btn" onclick="generateNewCodes()">
+                    <i class="fas fa-sync-alt"></i> Generate New Codes
+                </button>
+            </div>
+        </div>
+
+        <button id="toggle2faBtn" style="margin-top: 30px;">Disable 2FA</button>
+        <div class="toast" id="toast"></div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const statusBadge = document.getElementById('statusBadge');
+            const setupSection = document.getElementById('setupSection');
+            const verifyBtn = document.getElementById('verifyBtn');
+            const verificationCode = document.getElementById('verification-code');
+            const toggle2faBtn = document.getElementById('toggle2faBtn');
+            const backupCodesList = document.getElementById('backupCodes');
+            let is2faEnabled = true;
+
+            // Simulate verification process
+            verifyBtn.addEventListener('click', function() {
+                const code = verificationCode.value.trim();
+                if (code.length !== 6 || !/^\d+$/.test(code)) {
+                    showToast('Please enter a valid 6-digit code');
+                    return;
+                }
+
+                verifyBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Verifying...';
+                verifyBtn.disabled = true;
+
+                // Simulate API call
+                setTimeout(() => {
+                    is2faEnabled = true;
+                    updateUI();
+                    showToast('2FA successfully enabled!');
+                    verifyBtn.innerHTML = 'Verify and Enable 2FA';
+                    verifyBtn.disabled = false;
+                    verificationCode.value = '';
+                }, 1500);
+            });
+
+            // Toggle 2FA status
+            toggle2faBtn.addEventListener('click', function() {
+                if (is2faEnabled) {
+                    if (confirm('Are you sure you want to disable 2FA? Your account will be less secure.')) {
+                        toggle2faBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Disabling...';
+                        
+                        // Simulate API call
+                        setTimeout(() => {
+                            is2faEnabled = false;
+                            updateUI();
+                            showToast('2FA has been disabled');
+                            toggle2faBtn.innerHTML = 'Enable 2FA';
+                        }, 1000);
+                    }
+                } else {
+                    toggle2faBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enabling...';
+                    
+                    // Simulate API call
+                    setTimeout(() => {
+                        is2faEnabled = true;
+                        updateUI();
+                        showToast('2FA has been enabled');
+                        toggle2faBtn.innerHTML = 'Disable 2FA';
+                    }, 1000);
+                }
+            });
+
+            function updateUI() {
+                if (is2faEnabled) {
+                    statusBadge.textContent = 'Enabled';
+                    statusBadge.className = 'status-badge enabled';
+                    setupSection.style.display = 'none';
+                    toggle2faBtn.textContent = 'Disable 2FA';
+                } else {
+                    statusBadge.textContent = 'Disabled';
+                    statusBadge.className = 'status-badge disabled';
+                    setupSection.style.display = 'block';
+                    toggle2faBtn.textContent = 'Enable 2FA';
+                }
+            }
+
+            // Initialize UI
+            updateUI();
+        });
+
+        function copyBackupCodes() {
+            const codes = Array.from(document.querySelectorAll('#backupCodes li'))
+                .map(li => li.textContent)
+                .join('\n');
+            
+            navigator.clipboard.writeText(codes).then(() => {
+                showToast('Backup codes copied to clipboard!');
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+                showToast('Failed to copy codes, please try again');
+            });
+        }
+
+        function downloadBackupCodes() {
+            const codes = Array.from(document.querySelectorAll('#backupCodes li'))
+                .map(li => li.textContent)
+                .join('\n');
+            
+            const blob = new Blob([codes], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'backup-codes.txt';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            showToast('Backup codes downloaded!');
+        }
+
+        function generateNewCodes() {
+            if (confirm('Generating new backup codes will invalidate all previous codes. Continue?')) {
+                const codesList = document.getElementById('backupCodes');
+                codesList.innerHTML = '';
+                
+                // Generate 5 new random codes
+                for (let i = 0; i < 5; i++) {
+                    const code = generateCode();
+                    const li = document.createElement('li');
+                    li.textContent = code;
+                    codesList.appendChild(li);
+                }
+                
+                showToast('New backup codes generated!');
+            }
+        }
+
+        function generateCode() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let code = '';
+            for (let i = 0; i < 4; i++) {
+                code += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            code += '-';
+            for (let i = 0; i < 4; i++) {
+                code += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            code += '-';
+            for (let i = 0; i < 4; i++) {
+                code += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return code;
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.style.display = 'block';
+            
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bluqq - Rewards & Points</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        :root {
+            --black: #000;
+            --white: #fff;
+            --light-gray: #f5f5f5;
+            --medium-gray: #e0e0e0;
+            --dark-gray: #333;
+            --text-gray: #666;
+            --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        body {
+            background-color: var(--light-gray);
+            color: var(--black);
+            line-height: 1.6;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--medium-gray);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--black);
+            display: flex;
+            align-items: center;
+        }
+
+        .logo i {
+            margin-right: 10px;
+        }
+
+        .user-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .notification-btn, .user-profile {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--black);
+            cursor: pointer;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+        }
+
+        @media (min-width: 768px) {
+            .dashboard {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .dashboard {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .card {
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            padding: 24px;
+            transition: transform 0.3s ease;
+            border: 1px solid var(--medium-gray);
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--medium-gray);
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--black);
+        }
+
+        .card-action {
+            color: var(--black);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        .points-balance {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .points-amount {
+            font-size: 42px;
+            font-weight: 800;
+            color: var(--black);
+            margin: 10px 0;
+        }
+
+        .points-value {
+            font-size: 18px;
+            color: var(--text-gray);
+        }
+
+        .progress-container {
+            margin: 25px 0;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: var(--text-gray);
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: var(--medium-gray);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--black);
+            border-radius: 4px;
+            width: 65%;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--medium-gray);
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--light-gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            color: var(--black);
+            border: 1px solid var(--medium-gray);
+        }
+
+        .activity-details {
+            flex: 1;
+        }
+
+        .activity-name {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .activity-date {
+            font-size: 14px;
+            color: var(--text-gray);
+        }
+
+        .activity-points {
+            font-weight: 700;
+            color: var(--black);
+        }
+
+        .referral-section {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .referral-code {
+            background: var(--light-gray);
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            margin: 15px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid var(--medium-gray);
+        }
+
+        .copy-btn {
+            background: none;
+            border: none;
+            color: var(--black);
+            cursor: pointer;
+            font-size: 18px;
+            padding: 8px;
+            border-radius: 4px;
+        }
+
+        .copy-btn:hover {
+            background: var(--light-gray);
+        }
+
+        .social-share {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .share-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--light-gray);
+            color: var(--black);
+            border: 1px solid var(--medium-gray);
+            cursor: pointer;
+            font-size: 18px;
+            transition: all 0.3s;
+        }
+
+        .share-btn:hover {
+            background: var(--medium-gray);
+            transform: scale(1.05);
+        }
+
+        .redeem-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .redeem-option {
+            border: 1px solid var(--medium-gray);
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: var(--white);
+        }
+
+        .redeem-option:hover {
+            border-color: var(--black);
+            transform: translateY(-3px);
+        }
+
+        .redeem-option.selected {
+            border-color: var(--black);
+            background: var(--light-gray);
+        }
+
+        .option-icon {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: var(--black);
+        }
+
+        .option-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .option-rate {
+            font-size: 14px;
+            color: var(--text-gray);
+        }
+
+        .redeem-form {
+            margin-top: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--medium-gray);
+            border-radius: 8px;
+            font-size: 16px;
+            background: var(--white);
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: var(--black);
+        }
+
+        .conversion-rate {
+            text-align: center;
+            padding: 15px;
+            background: var(--light-gray);
+            border-radius: 8px;
+            margin: 15px 0;
+            font-size: 16px;
+            border: 1px solid var(--medium-gray);
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid var(--black);
+            width: 100%;
+        }
+
+        .btn-primary {
+            background: var(--black);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background: var(--dark-gray);
+        }
+
+        .btn-secondary {
+            background: var(--white);
+            color: var(--black);
+        }
+
+        .btn-secondary:hover {
+            background: var(--light-gray);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-card {
+            background: var(--light-gray);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid var(--medium-gray);
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--black);
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: var(--text-gray);
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--black);
+            color: var(--white);
+            padding: 12px 20px;
+            border-radius: 8px;
+            z-index: 1000;
+            display: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        @media (max-width: 768px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+            .redeem-options {
+                grid-template-columns: 1fr;
+            }
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-coins"></i>
+                <span>Bluqq Rewards</span>
+            </div>
+            <div class="user-actions">
+                <div class="notification-btn">
+                    <i class="fas fa-bell"></i>
+                </div>
+                <div class="user-profile">
+                    <i class="fas fa-user"></i>
+                </div>
+            </div>
+        </header>
+
+        <div class="dashboard">
+            <!-- Points Balance Card -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Points Balance</div>
+                    <div class="card-action">History</div>
+                </div>
+                <div class="points-balance">
+                    <div class="points-amount">5,250</div>
+                    <div class="points-value">≈ ₦5,250.00</div>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-label">
+                        <span>Next tier: Gold</span>
+                        <span>65%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value">12</div>
+                        <div class="stat-label">Referrals</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">38</div>
+                        <div class="stat-label">Activities</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">17</div>
+                        <div class="stat-label">App Usage Days</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">₦1,250</div>
+                        <div class="stat-label">Redeemed</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activity Card -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Recent Activity</div>
+                    <div class="card-action">View All</div>
+                </div>
+                <div class="activity-list">
+                    <div class="activity-item">
+                        <div class="activity-icon">
+                            <i class="fas fa-user-plus"></i>
+                        </div>
+                        <div class="activity-details">
+                            <div class="activity-name">Referral Bonus</div>
+                            <div class="activity-date">July 18, 2025</div>
+                        </div>
+                        <div class="activity-points">+500</div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-icon">
+                            <i class="fas fa-money-bill-wave"></i>
+                        </div>
+                        <div class="activity-details">
+                            <div class="activity-name">P2P Trade Bonus</div>
+                            <div class="activity-date">July 17, 2025</div>
+                        </div>
+                        <div class="activity-points">+250</div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="activity-details">
+                            <div class="activity-name">Daily Login</div>
+                            <div class="activity-date">July 17, 2025</div>
+                        </div>
+                        <div class="activity-points">+50</div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-icon">
+                            <i class="fas fa-gift"></i>
+                        </div>
+                        <div class="activity-details">
+                            <div class="activity-name">Birthday Bonus</div>
+                            <div class="activity-date">July 15, 2025</div>
+                        </div>
+                        <div class="activity-points">+1,000</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Referral Program Card -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Referral Program</div>
+                    <div class="card-action">Earn More</div>
+                </div>
+                <div class="referral-section">
+                    <p>Invite friends and earn 500 points for each successful referral</p>
+                    <div class="referral-code">
+                        <span>BLUQQ-7890</span>
+                        <button class="copy-btn" onclick="copyReferralCode()">
+                            <i class="far fa-copy"></i>
+                        </button>
+                    </div>
+                    <div class="social-share">
+                        <button class="share-btn">
+                            <i class="fab fa-facebook-f"></i>
+                        </button>
+                        <button class="share-btn">
+                            <i class="fab fa-twitter"></i>
+                        </button>
+                        <button class="share-btn">
+                            <i class="fab fa-whatsapp"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-label">
+                        <span>Referral Progress</span>
+                        <span>5/10</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 50%;"></div>
+                    </div>
+                </div>
+                <p style="text-align: center; margin-top: 15px; font-size: 14px; color: var(--text-gray);">
+                    Invite 5 more friends to unlock Gold Tier rewards
+                </p>
+            </div>
+
+            <!-- Redeem Points Card -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Redeem Points</div>
+                    <div class="card-action">Terms</div>
+                </div>
+                <p style="color: var(--text-gray); margin-bottom: 20px;">Convert your points to cash or cryptocurrency</p>
+                
+                <div class="redeem-options">
+                    <div class="redeem-option selected" id="option-naira" onclick="selectOption('naira')">
+                        <div class="option-icon">
+                            <i class="fas fa-naira-sign"></i>
+                        </div>
+                        <div class="option-name">Naira</div>
+                        <div class="option-rate">1 point = ₦1.00</div>
+                    </div>
+                    <div class="redeem-option" id="option-crypto" onclick="selectOption('crypto')">
+                        <div class="option-icon">
+                            <i class="fab fa-bitcoin"></i>
+                        </div>
+                        <div class="option-name">Cryptocurrency</div>
+                        <div class="option-rate">1 point = ₦1.00 equivalent</div>
+                    </div>
+                </div>
+
+                <div class="redeem-form">
+                    <div class="form-group">
+                        <label for="points-amount">Points to Redeem</label>
+                        <input type="number" id="points-amount" placeholder="Enter points amount" min="100" max="5250" oninput="calculateConversion()">
+                    </div>
+
+                    <div class="conversion-rate" id="conversion-display">
+                        0 points = ₦0.00
+                    </div>
+
+                    <div class="form-group" id="crypto-selection" style="display: none;">
+                        <label for="crypto-type">Select Cryptocurrency</label>
+                        <select id="crypto-type" class="form-control" onchange="calculateConversion()">
+                            <option value="btc">Bitcoin (BTC)</option>
+                            <option value="eth">Ethereum (ETH)</option>
+                            <option value="usdt">USDT</option>
+                            <option value="bnb">BNB</option>
+                        </select>
+                    </div>
+
+                    <button class="btn btn-primary" onclick="redeemPoints()">Redeem Now</button>
+                </div>
+            </div>
+
+            <!-- App Usage Card -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">App Usage Rewards</div>
+                    <div class="card-action">Details</div>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-label">
+                        <span>Daily Login Streak</span>
+                        <span>7 days</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 70%;"></div>
+                    </div>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-label">
+                        <span>Weekly Trading Goal</span>
+                        <span>₦150,000/₦200,000</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 75%;"></div>
+                    </div>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-label">
+                        <span>Monthly Activity</span>
+                        <span>85%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 85%;"></div>
+                    </div>
+                </div>
+                <button class="btn btn-secondary" style="margin-top: 20px;">Claim Daily Bonus</button>
+            </div>
+
+            <!-- Rewards History Card -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Redemption History</div>
+                    <div class="card-action">View All</div>
+                </div>
+                <div class="activity-list">
+                    <div class="activity-item">
+                        <div class="activity-icon">
+                            <i class="fas fa-exchange-alt"></i>
+                        </div>
+                        <div class="activity-details">
+                            <div class="activity-name">Points to Naira</div>
+                            <div class="activity-date">July 15, 2025</div>
+                        </div>
+                        <div class="activity-points">-1,000</div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-icon">
+                            <i class="fab fa-bitcoin"></i>
+                        </div>
+                        <div class="activity-details">
+                            <div class="activity-name">Points to BTC</div>
+                            <div class="activity-date">June 28, 2025</div>
+                        </div>
+                        <div class="activity-points">-2,500</div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-icon">
+                            <i class="fas fa-exchange-alt"></i>
+                        </div>
+                        <div class="activity-details">
+                            <div class="activity-name">Points to Naira</div>
+                            <div class="activity-date">June 15, 2025</div>
+                        </div>
+                        <div class="activity-points">-1,500</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="toast" id="toast"></div>
+    </div>
+
+    <script>
+        // Select redemption option
+        function selectOption(option) {
+            document.getElementById('option-naira').classList.remove('selected');
+            document.getElementById('option-crypto').classList.remove('selected');
+            document.getElementById('option-' + option).classList.add('selected');
+            
+            if (option === 'crypto') {
+                document.getElementById('crypto-selection').style.display = 'block';
+            } else {
+                document.getElementById('crypto-selection').style.display = 'none';
+            }
+            
+            calculateConversion();
+        }
+
+        // Calculate conversion
+        function calculateConversion() {
+            const points = document.getElementById('points-amount').value || 0;
+            const isCrypto = document.getElementById('option-crypto').classList.contains('selected');
+            const cryptoType = document.getElementById('crypto-type').value;
+            
+            const nairaValue = points * 1; // 1 point = ₦1
+            
+            if (isCrypto) {
+                // Simulated conversion rates
+                const rates = {
+                    'btc': 0.000000050,
+                    'eth': 0.00000080,
+                    'usdt': 0.20,
+                    'bnb': 0.0050
+                };
+                
+                const cryptoAmount = points * rates[cryptoType];
+                document.getElementById('conversion-display').innerHTML = 
+                    `${points} points = ${cryptoAmount.toFixed(8)} ${cryptoType.toUpperCase()}`;
+            } else {
+                document.getElementById('conversion-display').innerHTML = 
+                    `${points} points = ₦${nairaValue.toLocaleString()}`;
+            }
+        }
+
+        // Redeem points
+        function redeemPoints() {
+            const points = document.getElementById('points-amount').value;
+            
+            if (!points || points < 100) {
+                showToast('Minimum redemption is 100 points');
+                return;
+            }
+            
+            const isCrypto = document.getElementById('option-crypto').classList.contains('selected');
+            const redemptionType = isCrypto ? 'cryptocurrency' : 'Naira';
+            
+            showToast(`Success! Your redemption request for ${points} points to ${redemptionType} is being processed.`);
+            
+            // Reset form
+            document.getElementById('points-amount').value = '';
+            calculateConversion();
+        }
+
+        // Copy referral code
+        function copyReferralCode() {
+            navigator.clipboard.writeText('BLUQQ-7890').then(() => {
+                showToast('Referral code copied to clipboard!');
+            }).catch(err => {
+                showToast('Failed to copy, please try again');
+            });
+        }
+
+        // Show toast notification
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.style.display = 'block';
+            
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 3000);
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            calculateConversion();
+        });
+    </script>
+</body>
+</html>

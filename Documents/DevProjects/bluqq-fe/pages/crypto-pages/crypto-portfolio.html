@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bluqq - Crypto Portfolio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        :root {
+            --black: #000;
+            --white: #fff;
+            --light-gray: #f5f5f5;
+            --medium-gray: #e0e0e0;
+            --dark-gray: #333;
+            --text-gray: #666;
+            --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            --green: #008000;
+            --red: #cc0000;
+        }
+
+        body {
+            background-color: var(--light-gray);
+            color: var(--black);
+            line-height: 1.6;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--medium-gray);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--black);
+            display: flex;
+            align-items: center;
+        }
+
+        .logo i {
+            margin-right: 10px;
+        }
+
+        .user-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .notification-btn, .user-profile {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--black);
+            cursor: pointer;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 25px;
+            border-bottom: 1px solid var(--medium-gray);
+        }
+
+        .nav-tab {
+            padding: 12px 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            border-bottom: 2px solid transparent;
+            color: var(--text-gray);
+        }
+
+        .nav-tab.active {
+            border-bottom: 2px solid var(--black);
+            color: var(--black);
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+        }
+
+        .card {
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            padding: 24px;
+            border: 1px solid var(--medium-gray);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .card-action {
+            color: var(--black);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        .portfolio-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        @media (max-width: 768px) {
+            .portfolio-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .stat-card {
+            border: 1px solid var(--medium-gray);
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .stat-title {
+            font-size: 14px;
+            color: var(--text-gray);
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .stat-change {
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .positive {
+            color: var(--green);
+        }
+
+        .negative {
+            color: var(--red);
+        }
+
+        .portfolio-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .portfolio-table th, .portfolio-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--medium-gray);
+        }
+
+        .portfolio-table th {
+            font-weight: 600;
+            color: var(--text-gray);
+            cursor: pointer;
+        }
+
+        .portfolio-table th:hover {
+            color: var(--black);
+        }
+
+        .portfolio-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .crypto-cell {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .crypto-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--light-gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .crypto-name {
+            font-weight: 600;
+        }
+
+        .crypto-symbol {
+            font-size: 14px;
+            color: var(--text-gray);
+        }
+
+        .chart-container {
+            height: 300px;
+            margin: 20px 0;
+        }
+
+        .filter-bar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            border: 1px solid var(--medium-gray);
+            border-radius: 20px;
+            background: var(--white);
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .filter-btn.active, .filter-btn:hover {
+            background: var(--black);
+            color: var(--white);
+        }
+
+        .activity-list {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--medium-gray);
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--light-gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            color: var(--black);
+        }
+
+        .activity-details {
+            flex: 1;
+        }
+
+        .activity-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .activity-desc {
+            font-size: 14px;
+            color: var(--text-gray);
+            margin-bottom: 6px;
+        }
+
+        .activity-time {
+            font-size: 12px;
+            color: var(--text-gray);
+        }
+
+        .activity-amount {
+            font-weight: 700;
+            text-align: right;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+            gap: 10px;
+        }
+
+        .pagination-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--medium-gray);
+            background: var(--white);
+            cursor: pointer;
+        }
+
+        .pagination-btn.active {
+            background: var(--black);
+            color: var(--white);
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--black);
+            color: var(--white);
+            padding: 12px 20px;
+            border-radius: 8px;
+            z-index: 1000;
+            display: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        @media (max-width: 768px) {
+            .portfolio-table {
+                display: block;
+                overflow-x: auto;
+            }
+            
+            .filter-bar {
+                overflow-x: auto;
+                padding-bottom: 10px;
+            }
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fab fa-bitcoin"></i>
+                <span>Bluqq Crypto</span>
+            </div>
+            <div class="user-actions">
+                <div class="notification-btn">
+                    <i class="fas fa-bell"></i>
+                </div>
+                <div class="user-profile">
+                    <i class="fas fa-user"></i>
+                </div>
+            </div>
+        </header>
+
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showTab('portfolio')">Portfolio</button>
+            <button class="nav-tab" onclick="showTab('conversion')">Conversion History</button>
+            <button class="nav-tab" onclick="showTab('activity')">Recent Activity</button>
+        </div>
+
+        <!-- Portfolio Tab -->
+        <div class="tab-content active" id="portfolio-tab">
+            <div class="dashboard">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Portfolio Overview</div>
+                        <div class="card-action">View Report</div>
+                    </div>
+                    
+                    <div class="portfolio-stats">
+                        <div class="stat-card">
+                            <div class="stat-title">Total Balance</div>
+                            <div class="stat-value">₦15,245,320</div>
+                            <div class="stat-change positive">+5.2%</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-title">24h Change</div>
+                            <div class="stat-value">+₦754,250</div>
+                            <div class="stat-change positive">+5.2%</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-title">Profit/Loss</div>
+                            <div class="stat-value">+₦3,456,120</div>
+                            <div class="stat-change positive">+29.3%</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-title">Assets</div>
+                            <div class="stat-value">12</div>
+                            <div class="stat-change">+2 this month</div>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-container">
+                        <canvas id="portfolioChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">My Assets</div>
+                        <div class="card-action">Add Funds</div>
+                    </div>
+                    
+                    <table class="portfolio-table">
+                        <thead>
+                            <tr>
+                                <th>Asset</th>
+                                <th>Balance</th>
+                                <th>Price</th>
+                                <th>24h Change</th>
+                                <th>Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="crypto-cell">
+                                        <div class="crypto-icon">B</div>
+                                        <div>
+                                            <div class="crypto-name">Bitcoin</div>
+                                            <div class="crypto-symbol">BTC</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>0.2543 BTC</td>
+                                <td>₦24,850,000</td>
+                                <td class="positive">+3.2%</td>
+                                <td>₦6,320,455</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="crypto-cell">
+                                        <div class="crypto-icon">E</div>
+                                        <div>
+                                            <div class="crypto-name">Ethereum</div>
+                                            <div class="crypto-symbol">ETH</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>3.42 ETH</td>
+                                <td>₦1,850,000</td>
+                                <td class="positive">+1.8%</td>
+                                <td>₦6,327,000</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="crypto-cell">
+                                        <div class="crypto-icon">U</div>
+                                        <div>
+                                            <div class="crypto-name">Tether</div>
+                                            <div class="crypto-symbol">USDT</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>1,250 USDT</td>
+                                <td>₦1,250</td>
+                                <td>0.0%</td>
+                                <td>₦1,562,500</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="crypto-cell">
+                                        <div class="crypto-icon">S</div>
+                                        <div>
+                                            <div class="crypto-name">Solana</div>
+                                            <div class="crypto-symbol">SOL</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>15.5 SOL</td>
+                                <td>₦42,500</td>
+                                <td class="positive">+5.7%</td>
+                                <td>₦658,750</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="crypto-cell">
+                                        <div class="crypto-icon">S</div>
+                                        <div>
+                                            <div class="crypto-name">Sui</div>
+                                            <div class="crypto-symbol">SUI</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>850 SUI</td>
+                                <td>₦850</td>
+                                <td class="negative">-2.1%</td>
+                                <td>₦722,500</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="crypto-cell">
+                                        <div class="crypto-icon">B</div>
+                                        <div>
+                                            <div class="crypto-name">BNB</div>
+                                            <div class="crypto-symbol">BNB</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>12.5 BNB</td>
+                                <td>₦185,000</td>
+                                <td class="positive">+0.8%</td>
+                                <td>₦2,312,500</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Conversion History Tab -->
+        <div class="tab-content" id="conversion-tab">
+            <div class="dashboard">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Conversion Rate History</div>
+                        <div class="card-action">Download Data</div>
+                    </div>
+                    
+                    <div class="filter-bar">
+                        <button class="filter-btn active">All</button>
+                        <button class="filter-btn">BTC</button>
+                        <button class="filter-btn">ETH</button>
+                        <button class="filter-btn">USDT</button>
+                        <button class="filter-btn">SOL</button>
+                        <button class="filter-btn">SUI</button>
+                        <button class="filter-btn">Last 24h</button>
+                        <button class="filter-btn">7 Days</button>
+                        <button class="filter-btn">30 Days</button>
+                    </div>
+                    
+                    <div class="chart-container">
+                        <canvas id="conversionChart"></canvas>
+                    </div>
+                    
+                    <table class="portfolio-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>From</th>
+                                <th>To</th>
+                                <th>Rate</th>
+                                <th>Change</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Jul 19, 2023 14:30</td>
+                                <td>BTC</td>
+                                <td>NGN</td>
+                                <td>₦24,850,000</td>
+                                <td class="positive">+3.2%</td>
+                            </tr>
+                            <tr>
+                                <td>Jul 19, 2023 13:45</td>
+                                <td>ETH</td>
+                                <td>NGN</td>
+                                <td>₦1,850,000</td>
+                                <td class="positive">+1.8%</td>
+                            </tr>
+                            <tr>
+                                <td>Jul 19, 2023 12:20</td>
+                                <td>USDT</td>
+                                <td>NGN</td>
+                                <td>₦1,250</td>
+                                <td>0.0%</td>
+                            </tr>
+                            <tr>
+                                <td>Jul 19, 2023 11:15</td>
+                                <td>SOL</td>
+                                <td>NGN</td>
+                                <td>₦42,500</td>
+                                <td class="positive">+5.7%</td>
+                            </tr>
+                            <tr>
+                                <td>Jul 19, 2023 10:30</td>
+                                <td>SUI</td>
+                                <td>NGN</td>
+                                <td>₦850</td>
+                                <td class="negative">-2.1%</td>
+                            </tr>
+                            <tr>
+                                <td>Jul 19, 2023 09:45</td>
+                                <td>BTC</td>
+                                <td>ETH</td>
+                                <td>13.45 ETH</td>
+                                <td class="positive">+0.5%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <div class="pagination">
+                        <button class="pagination-btn active">1</button>
+                        <button class="pagination-btn">2</button>
+                        <button class="pagination-btn">3</button>
+                        <button class="pagination-btn">4</button>
+                        <button class="pagination-btn">5</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Activity Tab -->
+        <div class="tab-content" id="activity-tab">
+            <div class="dashboard">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Recent Activity</div>
+                        <div class="card-action">View All</div>
+                    </div>
+                    
+                    <div class="filter-bar">
+                        <button class="filter-btn active">All</button>
+                        <button class="filter-btn">Received</button>
+                        <button class="filter-btn">Sent</button>
+                        <button class="filter-btn">Converted</button>
+                        <button class="filter-btn">Trades</button>
+                        <button class="filter-btn">Today</button>
+                        <button class="filter-btn">This Week</button>
+                        <button class="filter-btn">This Month</button>
+                    </div>
+                    
+                    <div class="activity-list">
+                        <div class="activity-item">
+                            <div class="activity-icon">
+                                <i class="fas fa-arrow-down"></i>
+                            </div>
+                            <div class="activity-details">
+                                <div class="activity-title">Received Bitcoin</div>
+                                <div class="activity-desc">From: 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa</div>
+                                <div class="activity-time">2 hours ago • Completed</div>
+                            </div>
+                            <div class="activity-amount positive">+0.025 BTC</div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon">
+                                <i class="fas fa-exchange-alt"></i>
+                            </div>
+                            <div class="activity-details">
+                                <div class="activity-title">Converted to ETH</div>
+                                <div class="activity-desc">BTC to ETH conversion</div>
+                                <div class="activity-time">5 hours ago • Completed</div>
+                            </div>
+                            <div class="activity-amount negative">-0.1 BTC</div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon">
+                                <i class="fas fa-handshake"></i>
+                            </div>
+                            <div class="activity-details">
+                                <div class="activity-title">P2P Trade</div>
+                                <div class="activity-desc">Sold SOL to @DavidSmith</div>
+                                <div class="activity-time">Yesterday • Completed</div>
+                            </div>
+                            <div class="activity-amount negative">-15 SOL</div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon">
+                                <i class="fas fa-shopping-cart"></i>
+                            </div>
+                            <div class="activity-details">
+                                <div class="activity-title">Bought SUI</div>
+                                <div class="activity-desc">Market buy order</div>
+                                <div class="activity-time">2 days ago • Completed</div>
+                            </div>
+                            <div class="activity-amount positive">+500 SUI</div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon">
+                                <i class="fas fa-arrow-up"></i>
+                            </div>
+                            <div class="activity-details">
+                                <div class="activity-title">Sent USDT</div>
+                                <div class="activity-desc">To: 0x742d35Cc6634C0532925a3b844Bc454e4438f44e</div>
+                                <div class="activity-time">3 days ago • Completed</div>
+                            </div>
+                            <div class="activity-amount negative">-500 USDT</div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon">
+                                <i class="fas fa-exchange-alt"></i>
+                            </div>
+                            <div class="activity-details">
+                                <div class="activity-title">Converted to BTC</div>
+                                <div class="activity-desc">ETH to BTC conversion</div>
+                                <div class="activity-time">4 days ago • Completed</div>
+                            </div>
+                            <div class="activity-amount positive">+0.015 BTC</div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon">
+                                <i class="fas fa-arrow-down"></i>
+                            </div>
+                            <div class="activity-details">
+                                <div class="activity-title">Received Ethereum</div>
+                                <div class="activity-desc">From: 0x71C7656EC7ab88b098defB751B7401B5f6d8976F</div>
+                                <div class="activity-time">5 days ago • Completed</div>
+                            </div>
+                            <div class="activity-amount positive">+1.25 ETH</div>
+                        </div>
+                    </div>
+                    
+                    <div class="pagination">
+                        <button class="pagination-btn active">1</button>
+                        <button class="pagination-btn">2</button>
+                        <button class="pagination-btn">3</button>
+                        <button class="pagination-btn">4</button>
+                        <button class="pagination-btn">5</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="toast" id="toast"></div>
+    </div>
+
+    <script>
+        // Show selected tab
+        function showTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            document.getElementById(tabName + '-tab').classList.add('active');
+            event.currentTarget.classList.add('active');
+            
+            // Initialize charts when tab is shown
+            if (tabName === 'portfolio') {
+                initPortfolioChart();
+            } else if (tabName === 'conversion') {
+                initConversionChart();
+            }
+        }
+        
+        // Initialize portfolio chart
+        function initPortfolioChart() {
+            const ctx = document.getElementById('portfolioChart').getContext('2d');
+            
+            // Destroy existing chart if it exists
+            if (window.portfolioChartInstance) {
+                window.portfolioChartInstance.destroy();
+            }
+            
+            window.portfolioChartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+                    datasets: [{
+                        label: 'Portfolio Value (₦)',
+                        data: [9200000, 10500000, 11200000, 10800000, 12500000, 14200000, 15245320],
+                        borderColor: '#000',
+                        backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.05)'
+                            },
+                            ticks: {
+                                callback: function(value) {
+                                    return '₦' + (value / 1000000).toFixed(1) + 'M';
+                                }
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Initialize conversion chart
+        function initConversionChart() {
+            const ctx = document.getElementById('conversionChart').getContext('2d');
+            
+            // Destroy existing chart if it exists
+            if (window.conversionChartInstance) {
+                window.conversionChartInstance.destroy();
+            }
+            
+            window.conversionChartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00'],
+                    datasets: [
+                        {
+                            label: 'BTC/NGN',
+                            data: [24300000, 24450000, 24680000, 24720000, 24800000, 24850000, 24920000],
+                            borderColor: '#000',
+                            borderWidth: 2,
+                            tension: 0.3
+                        },
+                        {
+                            label: 'ETH/NGN',
+                            data: [1820000, 1835000, 1842000, 1850000, 1855000, 1860000, 1865000],
+                            borderColor: '#666',
+                            borderWidth: 2,
+                            tension: 0.3
+                        },
+                        {
+                            label: 'SOL/NGN',
+                            data: [41000, 41500, 41800, 42000, 42200, 42500, 42800],
+                            borderColor: '#999',
+                            borderWidth: 2,
+                            tension: 0.3
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.05)'
+                            },
+                            ticks: {
+                                callback: function(value) {
+                                    return '₦' + (value / 1000000).toFixed(1) + 'M';
+                                }
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Show toast notification
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.style.display = 'block';
+            
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 3000);
+        }
+        
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            initPortfolioChart();
+            
+            // Add filter functionality
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const parent = this.parentElement;
+                    if (!parent.classList.contains('filter-bar')) return;
+                    
+                    parent.querySelectorAll('.filter-btn').forEach(b => {
+                        b.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                    
+                    showToast('Filter applied: ' + this.textContent);
+                });
+            });
+            
+            // Add pagination functionality
+            document.querySelectorAll('.pagination-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const parent = this.parentElement;
+                    parent.querySelectorAll('.pagination-btn').forEach(b => {
+                        b.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                    
+                    showToast('Page ' + this.textContent + ' loaded');
+                });
+            });
+        });
+    </script>
+</body>
+</html>

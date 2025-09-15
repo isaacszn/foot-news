@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escrow Created</title>
+    <link rel="stylesheet" href="../assets/css/ecc.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <a href="dashboard.html" class="back-btn">←</a>
+        <div class="page-title">Escrow Created</div>
+        <div class="nav-spacer"></div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="confirm-container">
+        <!-- Escrow Header -->
+        <div class="escrow-header">
+            <div class="escrow-icon">✓</div>
+            <h1 class="escrow-title">Escrow Setup Complete!</h1>
+            <p class="escrow-subtitle">Your escrow has been successfully created. Share the code below with the other party to confirm the transaction.</p>
+        </div>
+
+        <!-- Escrow Details -->
+        <div class="form-section">
+            <div class="detail-row">
+                <span class="detail-label">Escrow ID</span>
+                <span class="detail-value">#ESC-2025-001234</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Amount</span>
+                <span class="detail-value">$250.00</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Service</span>
+                <span class="detail-value">Web Development</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Status</span>
+                <span class="detail-value">Pending Confirmation</span>
+            </div>
+        </div>
+
+        <!-- Confirmation Code -->
+        <div class="confirmation-section">
+            <h3>Confirmation Code</h3>
+            <p class="confirmation-subtitle">Share this code with the other party</p>
+            <div class="confirmation-code">ABC-789-XYZ</div>
+            <button class="copy-btn" onclick="copyCode()">
+                📋 Copy Code
+            </button>
+        </div>
+
+        <!-- Next Steps -->
+        <div class="steps-section">
+            <h3>
+                <span class="section-icon">📋</span>
+                Next Steps
+            </h3>
+            <div class="step-item">
+                <div class="step-number">1</div>
+                <div class="step-info">
+                    <div class="step-title">Share the confirmation code with the other party</div>
+                </div>
+            </div>
+            <div class="step-item">
+                <div class="step-number">2</div>
+                <div class="step-info">
+                    <div class="step-title">They will enter the code on the confirmation page</div>
+                </div>
+            </div>
+            <div class="step-item">
+                <div class="step-number">3</div>
+                <div class="step-info">
+                    <div class="step-title">Once confirmed, the escrow will be activated</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Payment Details -->
+        <div class="form-section">
+            <h3>
+                <span class="section-icon">💳</span>
+                Payment Details
+            </h3>
+            <div class="detail-row">
+                <span class="detail-label">Payment Method</span>
+                <span class="detail-value">BluOO Wallet</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Wallet Balance</span>
+                <span class="detail-value">$1,250.00</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Escrow Fee</span>
+                <span class="detail-value">$5.00</span>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button class="primary-btn">
+                📤 Share Details
+            </button>
+            <button class="secondary-btn">
+                👁️ View Escrow Details
+            </button>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p class="footer-text">Need help?</p>
+        </div>
+    </div>
+
+    <script src="../assets/scripts/ecc.js"></script>
+</body>
+</html>

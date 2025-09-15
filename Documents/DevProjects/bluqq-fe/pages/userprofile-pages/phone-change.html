@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Change Phone Number</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+        body {
+            background-color: #f5f5f5;
+            color: #000;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 30px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        h1 {
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        .current-phone {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 8px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        button {
+            background: #000;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+        }
+        .verification {
+            margin-top: 20px;
+            display: none;
+        }
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+                margin: 20px auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Change Phone Number</h1>
+        
+        <div class="current-phone">
+            <strong>Current Phone:</strong> +234 812 345 6789
+        </div>
+        
+        <div class="form-group">
+            <label for="new-phone">New Phone Number</label>
+            <input type="tel" id="new-phone" placeholder="Enter new phone number with country code">
+        </div>
+        
+        <button id="request-otp">Request Verification Code</button>
+        
+        <div class="verification" id="verification-section">
+            <div class="form-group">
+                <label for="otp">Verification Code</label>
+                <input type="text" id="otp" placeholder="Enter 6-digit code sent to your phone">
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Current Password</label>
+                <input type="password" id="password" placeholder="Enter your password to confirm">
+            </div>
+            
+            <button id="update-phone">Update Phone Number</button>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('request-otp').addEventListener('click', function() {
+            // Simulate sending OTP
+            alert('Verification code has been sent to your new phone number');
+            document.getElementById('verification-section').style.display = 'block';
+        });
+    </script>
+</body>
+</html>

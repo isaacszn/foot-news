@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bluqq - Withdraw Money</title>
+    <link rel="stylesheet" href="../assets/css/pullout.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <a href="dashboard.html">
+            <button class="back-btn">
+                <div style="color: #000000; font-size: 18px; font-weight: bold;">←</div>
+            </button>
+            <div class="page-title">Withdraw Money</div>
+            <div class="nav-spacer"></div>
+        </a>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="withdraw-container">
+        <!-- Success Message -->
+        <div class="success-message" id="successMessage">
+            ✅ Withdrawal successful! The money will be transferred shortly.
+        </div>
+
+        <!-- Currency Selector -->
+        <div class="currency-selector">
+            <h3>Select Currency</h3>
+            <div class="currency-buttons">
+
+                <button class="currency-btn" onclick="selectCurrency('USD', '$')">
+                    <span>$</span> USD
+                </button>
+                <button class="currency-btn" onclick="selectCurrency('NGN', '₦')">
+                    <span>₦</span> NGN
+                </button>
+            </div>
+        </div>
+
+        <!-- Current Balance -->
+        <div class="current-balance">
+            <h3>Current Account Balance</h3>
+            <div class="amount"><span id="currentCurrencySymbol">€</span><span id="currentBalance">10,000</span>.00</div>
+            <div class="available-balance">Available for Withdrawal</div>
+        </div>
+
+        <!-- Warning Message -->
+        <div class="warning-message" id="warningMessage">
+            ⚠️ Withdrawals may take 1–3 business days. Minimum: €10, Daily maximum: €2,000
+        </div>
+
+        <!-- Withdraw Amount -->
+        <div class="withdraw-amount">
+            <h3>Enter Amount</h3>
+            <div class="input-wrapper">
+                <div class="currency-symbol" id="inputCurrencySymbol">€</div>
+                <input type="number" class="amount-input" id="withdrawAmount" placeholder="0.00" min="10" max="2000" step="0.01">
+                <div class="error-message" id="errorMessage">Invalid amount</div>
+            </div>
+            
+            <div class="quick-amounts" id="quickAmounts">
+                <button class="quick-amount-btn" onclick="selectQuickAmount(50)">€50</button>
+                <button class="quick-amount-btn" onclick="selectQuickAmount(100)">€100</button>
+                <button class="quick-amount-btn" onclick="selectQuickAmount(200)">€200</button>
+                <button class="quick-amount-btn" onclick="selectQuickAmount(500)">€500</button>
+                <button class="quick-amount-btn" onclick="selectQuickAmount(1000)">€1,000</button>
+                <button class="quick-amount-btn" onclick="selectQuickAmount(2000)">€2,000</button>
+            </div>
+        </div>
+
+        <!-- Withdrawal Methods -->
+        <div class="withdrawal-methods">
+            <h3>Withdrawal Method</h3>
+            
+            <div class="withdrawal-method selected" onclick="selectWithdrawalMethod(this)">
+                <div class="method-icon">🏦</div>
+                <div class="method-info">
+                    <div class="method-name">Bank Transfer</div>
+                    <div class="method-details">Deutsche Bank ****5678</div>
+                    <div class="method-fee">Fee: Free</div>
+                </div>
+                <div class="radio-check"></div>
+            </div>
+
+            <div class="withdrawal-method" onclick="selectWithdrawalMethod(this)">
+                <div class="method-icon">💳</div>
+                <div class="method-info">
+                    <div class="method-name">Debit Card</div>
+                    <div class="method-details">Visa **** 1234</div>
+                    <div class="method-fee">Fee: <span id="debitCardFee">€1.50</span></div>
+                </div>
+                <div class="radio-check"></div>
+            </div>
+
+            <div class="withdrawal-method" onclick="selectWithdrawalMethod(this)">
+                <div class="method-icon">📱</div>
+                <div class="method-info">
+                    <div class="method-name">PayPal</div>
+                    <div class="method-details">isaac@example.com</div>
+                    <div class="method-fee">Fee: <span id="paypalFee">€2.00</span></div>
+                </div>
+                <div class="radio-check"></div>
+            </div>
+
+            <div class="withdrawal-method" onclick="selectWithdrawalMethod(this)">
+                <div class="method-icon">₿</div>
+                <div class="method-info">
+                    <div class="method-name">Bitcoin</div>
+                    <div class="method-details">BTC Wallet</div>
+                    <div class="method-fee">Fee: <span id="bitcoinFee">€5.00</span></div>
+                </div>
+                <div class="radio-check"></div>
+            </div>
+        </div>
+
+        <!-- Summary -->
+        <div class="summary">
+            <h3>Transaction Summary</h3>
+            <div class="summary-row">
+                <span>Withdrawal Amount:</span>
+                <span><span id="summaryCurrencySymbol">€</span><span id="summaryAmount">0.00</span></span>
+            </div>
+            <div class="summary-row">
+                <span>Processing Fee:</span>
+                <span><span id="summaryFeeCurrencySymbol">€</span><span id="summaryFee">0.00</span></span>
+            </div>
+            <div class="summary-row total">
+                <span>Total Charged:</span>
+                <span><span id="summaryTotalCurrencySymbol">€</span><span id="summaryTotal">0.00</span></span>
+            </div>
+            <div class="summary-row receive">
+                <span>You Receive:</span>
+                <span><span id="summaryReceiveCurrencySymbol">€</span><span id="summaryReceive">0.00</span></span>
+            </div>
+        </div>
+
+        <!-- Withdraw Button -->
+        <button class="withdraw-btn" id="withdrawButton" onclick="processWithdrawal()" disabled>
+            <span id="buttonText">Enter amount</span>
+        </button>
+    </div>
+
+    <script src="../assets/scripts/pullout.js"></script>
+
+</body>
+</html>

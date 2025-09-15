@@ -1,0 +1,1263 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Settings</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        :root {
+            --black: #000;
+            --white: #fff;
+            --light-gray: #f5f5f5;
+            --medium-gray: #e0e0e0;
+            --dark-gray: #333;
+            --text-gray: #666;
+            --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            --primary-blue: #2563eb;
+            --verified-green: #008000;
+        }
+
+        body {
+            background-color: var(--light-gray);
+            color: var(--black);
+            line-height: 1.6;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        .settings-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 280px;
+            background: var(--white);
+            border-right: 1px solid var(--medium-gray);
+            padding: 20px 0;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            padding: 0 20px 20px;
+            border-bottom: 1px solid var(--medium-gray);
+            margin-bottom: 20px;
+        }
+
+        .sidebar-header h1 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .sidebar-header p {
+            color: var(--text-gray);
+            font-size: 14px;
+        }
+
+        .nav-section {
+            margin-bottom: 30px;
+        }
+
+        .nav-section h3 {
+            padding: 0 20px;
+            margin-bottom: 15px;
+            font-size: 16px;
+            color: var(--text-gray);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            text-decoration: none;
+            color: var(--black);
+            transition: all 0.3s;
+            border-left: 3px solid transparent;
+        }
+
+        .nav-item:hover {
+            background: var(--light-gray);
+        }
+
+        .nav-item.active {
+            background: var(--light-gray);
+            border-left-color: var(--black);
+            font-weight: 600;
+        }
+
+        .nav-item i {
+            margin-right: 12px;
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 30px;
+        }
+
+        .content-header {
+            margin-bottom: 30px;
+        }
+
+        .content-header h2 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .content-header p {
+            color: var(--text-gray);
+        }
+
+        /* Settings Cards */
+        .settings-card {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: var(--card-shadow);
+            border: 1px solid var(--medium-gray);
+        }
+
+        .card-header {
+            margin-bottom: 25px;
+        }
+
+        .card-header h3 {
+            font-size: 20px;
+            margin-bottom: 8px;
+        }
+
+        .card-header p {
+            color: var(--text-gray);
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--medium-gray);
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--black);
+        }
+
+        .input-with-icon {
+            position: relative;
+        }
+
+        .input-with-icon input {
+            padding-right: 45px;
+        }
+
+        .input-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-gray);
+            cursor: pointer;
+        }
+
+        .error-message {
+            color: #d00;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--black);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background: var(--dark-gray);
+        }
+
+        .btn-secondary {
+            background: none;
+            color: var(--black);
+            border: 1px solid var(--black);
+        }
+
+        .btn-secondary:hover {
+            background: var(--light-gray);
+        }
+
+        .btn-danger {
+            background: #d00;
+            color: var(--white);
+        }
+
+        .btn-danger:hover {
+            background: #b00;
+        }
+
+        /* Toggle Switch */
+        .toggle-switch {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 0;
+            border-bottom: 1px solid var(--medium-gray);
+        }
+
+        .toggle-switch:last-child {
+            border-bottom: none;
+        }
+
+        .toggle-label {
+            font-weight: 500;
+        }
+
+        .toggle-description {
+            font-size: 14px;
+            color: var(--text-gray);
+            margin-top: 5px;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--medium-gray);
+            transition: .4s;
+            border-radius: 24px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--black);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        /* Tables */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--medium-gray);
+        }
+
+        .data-table th {
+            background: var(--light-gray);
+            font-weight: 600;
+        }
+
+        /* Wallet Address */
+        .wallet-address {
+            background: var(--light-gray);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-family: monospace;
+            word-break: break-all;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .copy-btn {
+            background: none;
+            border: none;
+            color: var(--black);
+            cursor: pointer;
+            margin-left: 10px;
+            padding: 5px;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+
+        .copy-btn:hover {
+            background: var(--medium-gray);
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--black);
+            color: var(--white);
+            padding: 12px 20px;
+            border-radius: 8px;
+            z-index: 1000;
+            display: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .sidebar {
+                width: 240px;
+            }
+            .main-content {
+                margin-left: 240px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .settings-container {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                border-right: none;
+                border-bottom: 1px solid var(--medium-gray);
+            }
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+            .nav-items {
+                display: flex;
+                overflow-x: auto;
+                padding-bottom: 10px;
+            }
+            .nav-item {
+                flex: 0 0 auto;
+                border-left: none;
+                border-bottom: 3px solid transparent;
+                padding: 10px 15px;
+            }
+            .nav-item.active {
+                border-left-color: transparent;
+                border-bottom-color: var(--black);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-content {
+                padding: 15px;
+            }
+            .settings-card {
+                padding: 20px;
+            }
+            .data-table {
+                font-size: 14px;
+            }
+            .btn {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+        }
+
+        /* Section specific styles */
+        .section-content {
+            display: none;
+        }
+
+        .section-content.active {
+            display: block;
+        }
+
+        .verification-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+
+        .verified {
+            background: var(--light-gray);
+            border: 1px solid var(--verified-green);
+            color: var(--verified-green);
+        }
+
+        .unverified {
+            background: var(--light-gray);
+            border: 1px solid var(--text-gray);
+            color: var(--text-gray);
+        }
+
+        .backup-codes {
+            background: var(--light-gray);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+
+        .backup-code {
+            font-family: monospace;
+            margin-bottom: 5px;
+            padding: 5px;
+            background: var(--white);
+            border-radius: 4px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="settings-container">
+        <!-- Sidebar Navigation -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h1>Settings</h1>
+                <p>Manage your account preferences</p>
+            </div>
+
+            <div class="nav-section">
+                <h3>Security</h3>
+                <a href="#pin" class="nav-item active" data-section="pin">
+                    <i class="fas fa-lock"></i> PIN Code
+                </a>
+                <a href="#password" class="nav-item" data-section="password">
+                    <i class="fas fa-key"></i> Password
+                </a>
+                <a href="#2fa" class="nav-item" data-section="2fa">
+                    <i class="fas fa-shield-alt"></i> 2FA Authentication
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <h3>Account</h3>
+                <a href="#email" class="nav-item" data-section="email">
+                    <i class="fas fa-envelope"></i> Email Address
+                </a>
+                <a href="#phone" class="nav-item" data-section="phone">
+                    <i class="fas fa-phone"></i> Phone Number
+                </a>
+                <a href="#notifications" class="nav-item" data-section="notifications">
+                    <i class="fas fa-bell"></i> Notifications
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <h3>Trading</h3>
+                <a href="#escrow" class="nav-item" data-section="escrow">
+                    <i class="fas fa-handshake"></i> Escrow History
+                </a>
+                <a href="#payment-methods" class="nav-item" data-section="payment-methods">
+                    <i class="fas fa-credit-card"></i> Payment Methods
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <h3>Support</h3>
+                <a href="#help" class="nav-item" data-section="help">
+                    <i class="fas fa-question-circle"></i> Help Center
+                </a>
+                <a href="#privacy" class="nav-item" data-section="privacy">
+                    <i class="fas fa-shield"></i> Privacy & Terms
+                </a>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- PIN Code Section -->
+            <div class="section-content active" id="pin-section">
+                <div class="content-header">
+                    <h2>PIN Code Settings</h2>
+                    <p>Manage your transaction PIN for secure operations</p>
+                </div>
+
+                <div class="settings-card">
+                    <div class="card-header">
+                        <h3>Change PIN Code</h3>
+                        <p>Update your 4-digit transaction PIN</p>
+                    </div>
+
+                    <form id="pinForm">
+                        <div class="form-group">
+                            <label for="current-pin">Current PIN</label>
+                            <div class="input-with-icon">
+                                <input type="password" id="current-pin" placeholder="Enter current 4-digit PIN" maxlength="4" pattern="\d{4}">
+                                <span class="input-icon" onclick="togglePassword('current-pin')">
+                                    <i class="fas fa-eye"></i>
+                                </span>
+                            </div>
+                            <div class="error-message" id="current-pin-error">Please enter your current 4-digit PIN</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="new-pin">New PIN</label>
+                            <div class="input-with-icon">
+                                <input type="password" id="new-pin" placeholder="Enter new 4-digit PIN" maxlength="4" pattern="\d{4}">
+                                <span class="input-icon" onclick="togglePassword('new-pin')">
+                                    <i class="fas fa-eye"></i>
+                                </span>
+                            </div>
+                            <div class="error-message" id="new-pin-error">PIN must be 4 digits and different from current PIN</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="confirm-pin">Confirm New PIN</label>
+                            <div class="input-with-icon">
+                                <input type="password" id="confirm-pin" placeholder="Confirm new 4-digit PIN" maxlength="4" pattern="\d{4}">
+                                <span class="input-icon" onclick="togglePassword('confirm-pin')">
+                                    <i class="fas fa-eye"></i>
+                                </span>
+                            </div>
+                            <div class="error-message" id="confirm-pin-error">PINs don't match</div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" id="pin-submit-btn" disabled>Update PIN</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Password Section -->
+            <div class="section-content" id="password-section">
+                <div class="content-header">
+                    <h2>Password Settings</h2>
+                    <p>Change your account password for enhanced security</p>
+                </div>
+
+                <div class="settings-card">
+                    <div class="card-header">
+                        <h3>Change Password</h3>
+                        <p>Update your account password</p>
+                    </div>
+
+                    <form id="passwordForm">
+                        <div class="form-group">
+                            <label for="current-password">Current Password</label>
+                            <div class="input-with-icon">
+                                <input type="password" id="current-password" placeholder="Enter current password">
+                                <span class="input-icon" onclick="togglePassword('current-password')">
+                                    <i class="fas fa-eye"></i>
+                                </span>
+                            </div>
+                            <div class="error-message" id="current-password-error">Please enter your current password</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="new-password">New Password</label>
+                            <div class="input-with-icon">
+                                <input type="password" id="new-password" placeholder="Enter new password">
+                                <span class="input-icon" onclick="togglePassword('new-password')">
+                                    <i class="fas fa-eye"></i>
+                                </span>
+                            </div>
+                            <div class="error-message" id="new-password-error">Password must be at least 8 characters with uppercase, lowercase, number, and special character</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="confirm-password">Confirm New Password</label>
+                            <div class="input-with-icon">
+                                <input type="password" id="confirm-password" placeholder="Confirm new password">
+                                <span class="input-icon" onclick="togglePassword('confirm-password')">
+                                    <i class="fas fa-eye"></i>
+                                </span>
+                            </div>
+                            <div class="error-message" id="confirm-password-error">Passwords don't match</div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" id="password-submit-btn" disabled>Update Password</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- 2FA Section -->
+            <div class="section-content" id="2fa-section">
+                <div class="content-header">
+                    <h2>Two-Factor Authentication</h2>
+                    <p>Add an extra layer of security to your account</p>
+                </div>
+
+                <div class="settings-card">
+                    <div class="card-header">
+                        <h3>2FA Status: <span class="verification-badge verified" id="2fa-status">Enabled</span></h3>
+                        <p>Protect your account with two-factor authentication</p>
+                    </div>
+
+                    <div id="2fa-setup">
+                        <div class="form-group">
+                            <label>Scan QR Code</label>
+                            <div style="text-align: center; margin: 20px 0;">
+                                <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=otpauth://totp/MyApp:user@example.com?secret=2FAKEY123456789&issuer=MyApp" alt="QR Code" style="border: 1px solid #ddd; padding: 10px;">
+                            </div>
+                            <p style="text-align: center;">Secret Key: <strong>2FAKEY123456789</strong></p>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="2fa-code">Verification Code</label>
+                            <input type="text" id="2fa-code" placeholder="Enter 6-digit code from authenticator app" maxlength="6">
+                            <div class="error-message" id="2fa-code-error">Please enter a valid 6-digit code</div>
+                        </div>
+
+                        <div class="action-buttons">
+                            <button class="btn btn-primary" id="enable-2fa-btn">Enable 2FA</button>
+                            <button class="btn btn-danger" id="disable-2fa-btn">Disable 2FA</button>
+                        </div>
+                    </div>
+
+                    <div class="backup-codes">
+                        <h4>Backup Codes</h4>
+                        <div id="backup-codes-list">
+                            <div class="backup-code">ABCD-EFGH-IJKL</div>
+                            <div class="backup-code">MNOP-QRST-UVWX</div>
+                            <div class="backup-code">YZ12-3456-7890</div>
+                            <div class="backup-code">9876-5432-10ZY</div>
+                            <div class="backup-code">XWVU-TSRQ-PONM</div>
+                        </div>
+                        <div class="action-buttons">
+                            <button class="btn btn-secondary" onclick="copyBackupCodes()">
+                                <i class="fas fa-copy"></i> Copy Codes
+                            </button>
+                            <button class="btn btn-secondary" onclick="downloadBackupCodes()">
+                                <i class="fas fa-download"></i> Download
+                            </button>
+                            <button class="btn btn-secondary" onclick="generateNewCodes()">
+                                <i class="fas fa-sync"></i> Regenerate
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Email Section -->
+            <div class="section-content" id="email-section">
+                <div class="content-header">
+                    <h2>Email Address</h2>
+                    <p>Manage your email address for account notifications</p>
+                </div>
+
+                <div class="settings-card">
+                    <div class="card-header">
+                        <h3>Current Email: <span class="verification-badge verified">john.anderson@sample.com</span></h3>
+                        <p>Update your email address for account communications</p>
+                    </div>
+
+                    <form id="emailForm">
+                        <div class="form-group">
+                            <label for="new-email">New Email Address</label>
+                            <input type="email" id="new-email" placeholder="Enter new email address">
+                            <div class="error-message" id="new-email-error">Please enter a valid email address</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="confirm-email">Confirm Email Address</label>
+                            <input type="email" id="confirm-email" placeholder="Confirm new email address">
+                            <div class="error-message" id="confirm-email-error">Email addresses don't match</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email-password">Current Password</label>
+                            <div class="input-with-icon">
+                                <input type="password" id="email-password" placeholder="Enter your password to confirm">
+                                <span class="input-icon" onclick="togglePassword('email-password')">
+                                    <i class="fas fa-eye"></i>
+                                </span>
+                            </div>
+                            <div class="error-message" id="email-password-error">Please enter your password</div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" id="email-submit-btn" disabled>Update Email</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Phone Section -->
+            <div class="section-content" id="phone-section">
+                <div class="content-header">
+                    <h2>Phone Number</h2>
+                    <p>Manage your phone number for account recovery and notifications</p>
+                </div>
+
+                <div class="settings-card">
+                    <div class="card-header">
+                        <h3>Current Phone: <span class="verification-badge verified">+234 812 345 6789</span></h3>
+                        <p>Update your phone number for security and communications</p>
+                    </div>
+
+                    <form id="phoneForm">
+                        <div class="form-group">
+                            <label for="new-phone">New Phone Number</label>
+                            <input type="tel" id="new-phone" placeholder="Enter new phone number with country code">
+                            <div class="error-message" id="new-phone-error">Please enter a valid phone number</div>
+                        </div>
+
+                        <button type="button" class="btn btn-secondary" id="request-otp-btn">Send Verification Code</button>
+
+                        <div class="form-group" id="otp-section" style="display: none;">
+                            <label for="phone-otp">Verification Code</label>
+                            <input type="text" id="phone-otp" placeholder="Enter 6-digit code sent to your phone" maxlength="6">
+                            <div class="error-message" id="phone-otp-error">Please enter the verification code</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phone-password">Current Password</label>
+                            <div class="input-with-icon">
+                                <input type="password" id="phone-password" placeholder="Enter your password to confirm">
+                                <span class="input-icon" onclick="togglePassword('phone-password')">
+                                    <i class="fas fa-eye"></i>
+                                </span>
+                            </div>
+                            <div class="error-message" id="phone-password-error">Please enter your password</div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" id="phone-submit-btn" disabled>Update Phone Number</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Notifications Section -->
+            <div class="section-content" id="notifications-section">
+                <div class="content-header">
+                    <h2>Notification Preferences</h2>
+                    <p>Customize how you receive notifications</p>
+                </div>
+
+                <div class="settings-card">
+                    <div class="card-header">
+                        <h3>Notification Settings</h3>
+                        <p>Manage your notification preferences</p>
+                    </div>
+
+                    <div class="toggle-switch">
+                        <div>
+                            <div class="toggle-label">Email Notifications</div>
+                            <div class="toggle-description">Receive important account notifications via email</div>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="toggle-switch">
+                        <div>
+                            <div class="toggle-label">SMS Notifications</div>
+                            <div class="toggle-description">Receive transaction alerts via SMS</div>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="toggle-switch">
+                        <div>
+                            <div class="toggle-label">Push Notifications</div>
+                            <div class="toggle-description">Receive push notifications on your device</div>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="toggle-switch">
+                        <div>
+                            <div class="toggle-label">Security Alerts</div>
+                            <div class="toggle-description">Get notified about security-related activities</div>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="toggle-switch">
+                        <div>
+                            <div class="toggle-label">Marketing Emails</div>
+                            <div class="toggle-description">Receive promotional offers and updates</div>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <button class="btn btn-primary" style="margin-top: 20px;">Save Preferences</button>
+                </div>
+            </div>
+
+            <!-- Payment Methods Section -->
+            <div class="section-content" id="payment-methods-section">
+                <div class="content-header">
+                    <h2>Payment Methods</h2>
+                    <p>Manage your bank accounts and crypto wallets</p>
+                </div>
+
+                <div class="settings-card">
+                    <div class="card-header">
+                        <h3>Bank Accounts</h3>
+                        <p>Manage your linked bank accounts</p>
+                    </div>
+
+                    <div class="payment-method">
+                        <div class="method-details">
+                            <div class="method-name">Guaranty Trust Bank (GTB)</div>
+                            <div class="method-info">Account Name: JOHN ANDERSON</div>
+                            <div class="wallet-address">
+                                <span id="bank-account">8345678901</span>
+                                <button class="copy-btn" onclick="copyToClipboard('bank-account', 'Bank account number')">
+                                    <i class="far fa-copy"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="method-actions">
+                            <button class="btn btn-primary">Send Money</button>
+                            <button class="btn btn-secondary">Receive Money</button>
+                            <button class="btn btn-secondary">Remove</button>
+                        </div>
+                    </div>
+
+                    <div class="add-method" style="text-align: center; margin-top: 20px;">
+                        <button class="btn btn-secondary">
+                            <i class="fas fa-plus"></i> Add Bank Account
+                        </button>
+                    </div>
+                </div>
+
+                <div class="settings-card">
+                    <div class="card-header">
+                        <h3>Crypto Wallets</h3>
+                        <p>Manage your cryptocurrency wallets</p>
+                    </div>
+
+                    <div class="payment-method">
+                        <div class="method-details">
+                            <div class="method-name">Bitcoin (BTC) Wallet</div>
+                            <div class="wallet-address">
+                                <span id="btc-address">3FZbgi29cpjq2GjdwV8eyHuJJnkLtktZc5</span>
+                                <button class="copy-btn" onclick="copyToClipboard('btc-address', 'BTC address')">
+                                    <i class="far fa-copy"></i>
+                                </button>
+                            </div>
+                            <div class="action-buttons">
+                                <button class="btn btn-primary">Receive BTC</button>
+                                <button class="btn btn-secondary">Send BTC</button>
+                                <button class="btn btn-secondary">Convert</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="payment-method">
+                        <div class="method-details">
+                            <div class="method-name">Ethereum (ETH) Wallet</div>
+                            <div class="wallet-address">
+                                <span id="eth-address">0x71C7656EC7ab88b098defB751B7401B5f6d8976F</span>
+                                <button class="copy-btn" onclick="copyToClipboard('eth-address', 'ETH address')">
+                                    <i class="far fa-copy"></i>
+                                </button>
+                            </div>
+                            <div class="action-buttons">
+                                <button class="btn btn-primary">Receive ETH</button>
+                                <button class="btn btn-secondary">Send ETH</button>
+                                <button class="btn btn-secondary">Convert</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="add-method" style="text-align: center; margin-top: 20px;">
+                        <button class="btn btn-secondary">
+                            <i class="fas fa-plus"></i> Add Crypto Wallet
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Toast Notification -->
+            <div class="toast" id="toast"></div>
+        </div>
+    </div>
+
+    <script>
+        // Navigation functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Handle navigation clicks
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Remove active class from all items
+                    document.querySelectorAll('.nav-item').forEach(nav => {
+                        nav.classList.remove('active');
+                    });
+                    
+                    // Add active class to clicked item
+                    this.classList.add('active');
+                    
+                    // Show corresponding section
+                    const sectionId = this.getAttribute('data-section');
+                    document.querySelectorAll('.section-content').forEach(section => {
+                        section.classList.remove('active');
+                    });
+                    document.getElementById(`${sectionId}-section`).classList.add('active');
+                });
+            });
+
+            // Initialize form validations
+            initPinForm();
+            initPasswordForm();
+            initEmailForm();
+            initPhoneForm();
+            init2FA();
+        });
+
+        // Toggle password visibility
+        function togglePassword(inputId) {
+            const input = document.getElementById(inputId);
+            const icon = input.nextElementSibling.querySelector('i');
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+
+        // Copy to clipboard function
+        function copyToClipboard(elementId, label) {
+            const element = document.getElementById(elementId);
+            const text = element.textContent;
+            
+            navigator.clipboard.writeText(text).then(() => {
+                showToast(`${label} copied to clipboard!`);
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+                showToast('Failed to copy, please try again');
+            });
+        }
+
+        // Show toast notification
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.style.display = 'block';
+            
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 3000);
+        }
+
+        // PIN Form validation
+        function initPinForm() {
+            const form = document.getElementById('pinForm');
+            const currentPin = document.getElementById('current-pin');
+            const newPin = document.getElementById('new-pin');
+            const confirmPin = document.getElementById('confirm-pin');
+            const submitBtn = document.getElementById('pin-submit-btn');
+
+            [currentPin, newPin, confirmPin].forEach(input => {
+                input.addEventListener('input', validatePinForm);
+            });
+
+            function validatePinForm() {
+                let isValid = true;
+
+                // Validate current PIN
+                if (currentPin.value.length !== 4 || !/^\d+$/.test(currentPin.value)) {
+                    document.getElementById('current-pin-error').style.display = 'block';
+                    isValid = false;
+                } else {
+                    document.getElementById('current-pin-error').style.display = 'none';
+                }
+
+                // Validate new PIN
+                if (newPin.value.length !== 4 || !/^\d+$/.test(newPin.value) || newPin.value === currentPin.value) {
+                    document.getElementById('new-pin-error').style.display = 'block';
+                    isValid = false;
+                } else {
+                    document.getElementById('new-pin-error').style.display = 'none';
+                }
+
+                // Validate confirm PIN
+                if (confirmPin.value !== newPin.value) {
+                    document.getElementById('confirm-pin-error').style.display = 'block';
+                    isValid = false;
+                } else {
+                    document.getElementById('confirm-pin-error').style.display = 'none';
+                }
+
+                submitBtn.disabled = !isValid;
+                return isValid;
+            }
+
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                if (validatePinForm()) {
+                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Updating...';
+                    submitBtn.disabled = true;
+                    
+                    setTimeout(() => {
+                        showToast('PIN successfully updated!');
+                        form.reset();
+                        submitBtn.innerHTML = 'Update PIN';
+                        submitBtn.disabled = true;
+                    }, 1500);
+                }
+            });
+
+            // Make PIN fields numeric only
+            [currentPin, newPin, confirmPin].forEach(input => {
+                input.addEventListener('keypress', function(e) {
+                    if (e.key < '0' || e.key > '9') {
+                        e.preventDefault();
+                    }
+                });
+            });
+        }
+
+        // Password Form validation
+        function initPasswordForm() {
+            const form = document.getElementById('passwordForm');
+            const submitBtn = document.getElementById('password-submit-btn');
+
+            form.querySelectorAll('input').forEach(input => {
+                input.addEventListener('input', validatePasswordForm);
+            });
+
+            function validatePasswordForm() {
+                // Implementation similar to PIN form
+                submitBtn.disabled = false; // Simplified for this example
+            }
+
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Updating...';
+                
+                setTimeout(() => {
+                    showToast('Password successfully updated!');
+                    form.reset();
+                    submitBtn.innerHTML = 'Update Password';
+                }, 1500);
+            });
+        }
+
+        // Email Form validation
+        function initEmailForm() {
+            const form = document.getElementById('emailForm');
+            const submitBtn = document.getElementById('email-submit-btn');
+
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Updating...';
+                
+                setTimeout(() => {
+                    showToast('Email verification sent! Please check your new email.');
+                    form.reset();
+                    submitBtn.innerHTML = 'Update Email';
+                }, 1500);
+            });
+        }
+
+        // Phone Form validation
+        function initPhoneForm() {
+            const form = document.getElementById('phoneForm');
+            const requestOtpBtn = document.getElementById('request-otp-btn');
+            const otpSection = document.getElementById('otp-section');
+            const submitBtn = document.getElementById('phone-submit-btn');
+
+            requestOtpBtn.addEventListener('click', function() {
+                showToast('Verification code sent to your phone');
+                otpSection.style.display = 'block';
+                submitBtn.disabled = false;
+            });
+
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Updating...';
+                
+                setTimeout(() => {
+                    showToast('Phone number successfully updated!');
+                    form.reset();
+                    otpSection.style.display = 'none';
+                    submitBtn.innerHTML = 'Update Phone Number';
+                    submitBtn.disabled = true;
+                }, 1500);
+            });
+        }
+
+        // 2FA functionality
+        function init2FA() {
+            const enableBtn = document.getElementById('enable-2fa-btn');
+            const disableBtn = document.getElementById('disable-2fa-btn');
+            const statusBadge = document.getElementById('2fa-status');
+
+            enableBtn.addEventListener('click', function() {
+                const code = document.getElementById('2fa-code').value;
+                if (code.length !== 6) {
+                    showToast('Please enter a valid 6-digit code');
+                    return;
+                }
+
+                enableBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enabling...';
+                
+                setTimeout(() => {
+                    statusBadge.textContent = 'Enabled';
+                    showToast('2FA successfully enabled!');
+                    enableBtn.innerHTML = 'Enable 2FA';
+                }, 1500);
+            });
+
+            disableBtn.addEventListener('click', function() {
+                if (confirm('Are you sure you want to disable 2FA? Your account will be less secure.')) {
+                    disableBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Disabling...';
+                    
+                    setTimeout(() => {
+                        statusBadge.textContent = 'Disabled';
+                        showToast('2FA has been disabled');
+                        disableBtn.innerHTML = 'Disable 2FA';
+                    }, 1500);
+                }
+            });
+        }
+
+        // Backup codes functionality
+        function copyBackupCodes() {
+            const codes = Array.from(document.querySelectorAll('.backup-code'))
+                .map(div => div.textContent)
+                .join('\n');
+            
+            navigator.clipboard.writeText(codes).then(() => {
+                showToast('Backup codes copied to clipboard!');
+            });
+        }
+
+        function downloadBackupCodes() {
+            const codes = Array.from(document.querySelectorAll('.backup-code'))
+                .map(div => div.textContent)
+                .join('\n');
+            
+            const blob = new Blob([codes], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'backup-codes.txt';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            showToast('Backup codes downloaded!');
+        }
+
+        function generateNewCodes() {
+            if (confirm('Generating new backup codes will invalidate all previous codes. Continue?')) {
+                const codesList = document.getElementById('backup-codes-list');
+                codesList.innerHTML = '';
+                
+                for (let i = 0; i < 5; i++) {
+                    const code = generateCode();
+                    const div = document.createElement('div');
+                    div.className = 'backup-code';
+                    div.textContent = code;
+                    codesList.appendChild(div);
+                }
+                
+                showToast('New backup codes generated!');
+            }
+        }
+
+        function generateCode() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let code = '';
+            for (let i = 0; i < 4; i++) {
+                code += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            code += '-';
+            for (let i = 0; i < 4; i++) {
+                code += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            code += '-';
+            for (let i = 0; i < 4; i++) {
+                code += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return code;
+        }
+    </script>
+</body>
+</html>

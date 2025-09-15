@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Methods</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+        body {
+            background-color: #f5f5f5;
+            color: #000;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 30px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        h1 {
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        .section {
+            margin-bottom: 40px;
+        }
+        .section-title {
+            font-size: 18px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .payment-method {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        .method-details {
+            flex: 1;
+        }
+        .method-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        .method-info {
+            color: #666;
+            font-size: 14px;
+        }
+        .method-actions {
+            display: flex;
+            gap: 10px;
+        }
+        .action-btn {
+            padding: 8px 15px;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .primary {
+            background: #000;
+            color: white;
+            border: none;
+        }
+        .primary:hover {
+            background: #333;
+        }
+        .secondary {
+            background: none;
+            color: #000;
+            border: 1px solid #000;
+        }
+        .secondary:hover {
+            background: #f5f5f5;
+        }
+        .wallet-address {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-family: monospace;
+            word-break: break-all;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .copy-btn {
+            background: none;
+            border: none;
+            color: #000;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        .wallet-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .add-method {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .add-btn {
+            background: none;
+            color: #000;
+            border: 1px dashed #000;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s;
+        }
+        .add-btn:hover {
+            background: #f5f5f5;
+        }
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #000;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            z-index: 1000;
+            display: none;
+        }
+        @media (max-width: 768px) {
+            .payment-method {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            .method-actions, .wallet-actions {
+                width: 100%;
+            }
+            .action-btn {
+                flex: 1;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Payment Methods</h1>
+        
+        <div class="section">
+            <h2 class="section-title">Bank Accounts</h2>
+            
+            <div class="payment-method">
+                <div class="method-details">
+                    <div class="method-name">Guaranty Trust Bank (GTB)</div>
+                    <div class="method-info">Account Name: IsaacSzn</div>
+                    <div class="wallet-address">
+                        <span id="bank-account">8345678901</span>
+                        <button class="copy-btn" onclick="copyToClipboard('bank-account', 'Bank account number')">
+                            <i class="far fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="method-actions">
+                    <button class="action-btn primary">Send Money</button>
+                    <button class="action-btn secondary">Receive Money</button>
+                    <button class="action-btn secondary">Remove</button>
+                </div>
+            </div>
+            
+            <div class="add-method">
+                <button class="add-btn">
+                    <i class="fas fa-plus"></i> Add Bank Account
+                </button>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2 class="section-title">Crypto Wallets</h2>
+            
+            <div class="payment-method">
+                <div class="method-details">
+                    <div class="method-name">Bitcoin (BTC) Wallet</div>
+                    <div class="wallet-address">
+                        <span id="btc-address">3FZbgi29cpjq2GjdwV8eyHuJJnkLtktZc5</span>
+                        <button class="copy-btn" onclick="copyToClipboard('btc-address', 'BTC address')">
+                            <i class="far fa-copy"></i>
+                        </button>
+                    </div>
+                    <div class="wallet-actions">
+                        <button class="action-btn primary">Receive BTC</button>
+                        <button class="action-btn secondary">Send BTC</button>
+                        <button class="action-btn secondary">Convert</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="payment-method">
+                <div class="method-details">
+                    <div class="method-name">Ethereum (ETH) Wallet</div>
+                    <div class="wallet-address">
+                        <span id="eth-address">0x71C7656EC7ab88b098defB751B7401B5f6d8976F</span>
+                        <button class="copy-btn" onclick="copyToClipboard('eth-address', 'ETH address')">
+                            <i class="far fa-copy"></i>
+                        </button>
+                    </div>
+                    <div class="wallet-actions">
+                        <button class="action-btn primary">Receive ETH</button>
+                        <button class="action-btn secondary">Send ETH</button>
+                        <button class="action-btn secondary">Convert</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="payment-method">
+                <div class="method-details">
+                    <div class="method-name">USDT (ERC20) Wallet</div>
+                    <div class="wallet-address">
+                        <span id="usdt-address">0x71C7656EC7ab88b098defB751B7401B5f6d8976F</span>
+                        <button class="copy-btn" onclick="copyToClipboard('usdt-address', 'USDT address')">
+                            <i class="far fa-copy"></i>
+                        </button>
+                    </div>
+                    <div class="wallet-actions">
+                        <button class="action-btn primary">Receive USDT</button>
+                        <button class="action-btn secondary">Send USDT</button>
+                        <button class="action-btn secondary">Convert</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="add-method">
+                <button class="add-btn">
+                    <i class="fas fa-plus"></i> Add Crypto Wallet
+                </button>
+            </div>
+        </div>
+
+        <div class="toast" id="toast"></div>
+    </div>
+
+    <script>
+        function copyToClipboard(elementId, label) {
+            const element = document.getElementById(elementId);
+            const text = element.innerText;
+            
+            navigator.clipboard.writeText(text).then(() => {
+                showToast(`${label} copied to clipboard!`);
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+                showToast('Failed to copy, please try again');
+            });
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.style.display = 'block';
+            
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 3000);
+        }
+
+        // Handle add bank account button
+        document.querySelectorAll('.add-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const isBank = this.textContent.includes('Bank');
+                showToast(`Redirecting to ${isBank ? 'bank account' : 'crypto wallet'} addition page`);
+                // In a real app, this would redirect to an add form
+            });
+        });
+
+        // Handle action buttons
+        document.querySelectorAll('.action-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const action = this.textContent.trim();
+                const method = this.closest('.payment-method').querySelector('.method-name').textContent;
+                
+                if (action === 'Remove') {
+                    if (confirm(`Are you sure you want to remove this ${method.includes('Wallet') ? 'wallet' : 'bank account'}?`)) {
+                        showToast(`${method} removed successfully`);
+                        // In a real app, this would make an API call to remove
+                    }
+                } else {
+                    showToast(`${action} ${method}`);
+                    // In a real app, this would open the appropriate modal or page
+                }
+            });
+        });
+    </script>
+</body>
+</html>

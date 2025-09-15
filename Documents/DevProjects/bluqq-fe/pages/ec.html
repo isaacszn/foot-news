@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bluqq Escrow - Confirm Escrow</title>
+    <link rel="stylesheet" href="/frontend/assets/css/ec.css">
+</head>
+<body>
+    <nav>
+        <a href="/frontend/pages/dashboard.html" class="back-btn">←</a>
+        <div class="page-title">Confirm Escrow</div>
+        <button class="menu-btn">⋮</button>
+    </nav>
+
+    <div class="confirm-container">
+        <!-- Escrow Header -->
+        <div class="escrow-header">
+            <div class="escrow-icon">📄</div>
+            <div class="escrow-title">Escrow Transaction</div>
+            <div class="escrow-id">ID: #ESC-2025-001234</div>
+        </div>
+
+        <!-- Transaction Details -->
+        <div class="form-section">
+            <h3>Transaction Details</h3>
+            <div class="detail-row">
+                <span class="detail-label">Amount</span>
+                <span class="detail-value">$1,250.00</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Service</span>
+                <span class="detail-value">Web Development</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Deadline</span>
+                <span class="detail-value">Jan 15, 2025</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Payment Method</span>
+                <span class="detail-value">BluQQ Wallet</span>
+            </div>
+        </div>
+
+        <!-- Parties Involved -->
+        <div class="form-section">
+            <h3>Parties Involved</h3>
+            <div class="party-item">
+                <div class="party-avatar">👤</div>
+                <div class="party-info">
+                    <div class="party-name">John Smith</div>
+                    <div class="party-role">Buyer</div>
+                </div>
+                <div class="party-status"></div>
+            </div>
+            <div class="party-item">
+                <div class="party-avatar">👤</div>
+                <div class="party-info">
+                    <div class="party-name">Sarah Johnson</div>
+                    <div class="party-role">Seller</div>
+                </div>
+                <div class="party-status"></div>
+            </div>
+        </div>
+
+        <!-- Service Completion -->
+        <div class="form-section">
+            <h3>Service Completion</h3>
+            <div class="completion-item">
+                <div class="completion-icon completed">✓</div>
+                <div class="completion-info">
+                    <div class="completion-title">Work Delivered</div>
+                    <div class="completion-desc">The seller has marked the work as completed and delivered.</div>
+                </div>
+            </div>
+            <div class="completion-item">
+                <div class="completion-icon pending">⏳</div>
+                <div class="completion-info">
+                    <div class="completion-title">Awaiting Confirmation</div>
+                    <div class="completion-desc">Please review the delivered work and confirm completion.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Warning Notice -->
+        <div class="warning-notice">
+            <div class="warning-icon">⚠️</div>
+            <div class="warning-text">
+                Once you confirm completion, funds will be released to the seller. If you dispute, the transaction will be reviewed by our team. This action cannot be undone.
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button class="primary-btn" onclick="confirmCompletion()">
+                ✓ Confirm Completion & Release Funds
+            </button>
+            <a href="/frontend/pages/dashboard.html">
+            <button class="secondary-btn" onclick="disputeTransaction()">
+                ⚠️ Dispute Transaction
+            </button>
+            </a>
+            <button class="tertiary-btn" onclick="requestChanges()">
+                🔄 Request Changes
+            </button>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <div class="footer-text">Secured by BluQQ Escrow</div>
+            <a href="/terms" class="footer-link">Transaction Terms & Conditions</a>
+        </div>
+    </div>
+
+    <script src="/frontend/assets/scripts/ec.js"></script>
+</body>
+</html>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en"> 
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bluqq - Secure Escrow Platform</title>
+    <link rel="stylesheet" href="/assets/css/auth.css">
+</head>
+
+<body>
+    <div class="auth-container">
+        <!-- Header -->
+        <div class="auth-header">
+            <div class="logo">Bluqq</div>
+            <div class="logo-subtitle">Secure Escrow Platform</div>
+            
+            <div class="auth-toggle">
+                <button class="toggle-btn active" onclick="switchForm('login')">Login</button>
+                <button class="toggle-btn" onclick="switchForm('register')">Register</button>
+            </div>
+        </div>
+        
+        <!-- Login Form -->
+        <div id="login-form" class="form-page active">
+            <div class="auth-form">
+                <div class="error-message" id="login-error"></div>
+                <div class="success-message" id="login-success"></div>
+                
+                <form onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label class="form-label" for="login-email">Email Address</label>
+                        <input type="email" id="login-email" class="form-input" placeholder="Enter your email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="login-password">Password</label>
+                        <div class="password-container">
+                            <input type="password" id="login-password" class="form-input" placeholder="Enter your password" required>
+                            <button type="button" class="password-toggle" onclick="togglePassword('login-password')">
+                                👁️
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="checkbox-group">
+                        <div class="checkbox" onclick="toggleCheckbox(this)"></div>
+                        <label class="checkbox-label">Remember me</label>
+                    </div>
+                    
+                    <div class="forgot-password">
+                        <a href="/pages/auth-pages/forgot-password.html" class="forgot-link">Forgot Password?</a>
+                    </div>
+                        <button type="submit" class="submit-btn" id="login-btn">
+                            Sign In
+                        </button>
+                </form>
+            </div>
+            
+            <div class="auth-footer">
+                Don't have an account?
+                <a href="#" class="auth-link" onclick="switchForm('register')">Sign up</a>
+            </div>
+        </div>
+        
+        <!-- Register Form -->
+        <div id="register-form" class="form-page">
+            <div class="auth-form">
+                <div class="error-message" id="register-error"></div>
+                <div class="success-message" id="register-success"></div>
+                
+                <form onsubmit="handleRegister(event)">
+                    <div class="form-group">
+                        <label class="form-label" for="register-firstname">First Name</label>
+                        <input type="text" id="register-firstname" class="form-input" placeholder="Enter your first name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="register-lastname">Last Name</label>
+                        <input type="text" id="register-lastname" class="form-input" placeholder="Enter your last name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="register-email">Email Address</label>
+                        <input type="email" id="register-email" class="form-input" placeholder="Enter your email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="register-password">Password</label>
+                        <div class="password-container">
+                            <input type="password" id="register-password" class="form-input" placeholder="Create a password" required>
+                            <button type="button" class="password-toggle" onclick="togglePassword('register-password')">
+                                👁️
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="register-confirm-password">Confirm Password</label>
+                        <div class="password-container">
+                            <input type="password" id="register-confirm-password" class="form-input" placeholder="Confirm your password" required>
+                            <button type="button" class="password-toggle" onclick="togglePassword('register-confirm-password')">
+                                👁️
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="checkbox-group">
+                        <div class="checkbox" onclick="toggleCheckbox(this)"></div>
+                        <label class="checkbox-label">I agree to the <a href="#" class="auth-link">Terms of Service</a> and <a href="#" class="auth-link">Privacy Policy</a></label>
+                    </div>
+                        <button type="submit" class="submit-btn" id="register-btn">
+                            Create Account
+                        </button>
+                </form>
+            </div>
+            
+            <div class="auth-footer">
+                Already have an account?
+                <a href="#" class="auth-link" onclick="switchForm('login')">Sign in</a>
+            </div>
+        </div>
+    </div>
+    
+    <script src="/assets/scripts/auth-scripts/auth.js"></script>
+</body>
+
+</html>
