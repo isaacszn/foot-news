@@ -1,0 +1,52 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Importing fonts */
+@font-face {
+    font-family: Poppins;
+    src: url("./assets/fonts/Poppins/Poppins-Regular.ttf");
+}
+
+/* Variables */
+:root {
+    --bg-color: #121212;
+    --primary-color: #FF6B00;
+    --text-color: #E0E0E0;
+    ---accent-color: #FFF;
+}
+
+body {
+    height: 100vh;
+    font-family: Poppins, sans-serif;
+    background: var(--bg-color);
+    color: var(--text-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+}
+
+p {
+    margin: 20px;
+}
+
+button {
+    font: inherit;
+    background-color: var(--primary-color);
+    width: 70%;
+    height: 50px;
+    font-weight: bolder;
+    padding: 5px;
+    border-radius: 10px;
+    margin: 0 20px;
+    cursor: pointer;
+}
+
+.text-highlight {
+    color: var(--primary-color);
+    font-weight: bold;
+}
