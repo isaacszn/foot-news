@@ -1,3 +1,3 @@
-# FootNews // Add football emoji
+# FootNews ⚽
 
 Keep track of latest football news, signings, scores and lots more...
