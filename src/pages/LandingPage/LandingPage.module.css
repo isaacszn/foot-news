@@ -1,5 +1,5 @@
-body {
-    height: 100vh;
+.container {
+    height: 90vh;
     font-family: Poppins, sans-serif;
     background: var(--bg-color);
     color: var(--text-color);
@@ -10,24 +10,24 @@ body {
     text-align: center;
 }
 
-p {
-    margin: 20px;
+.container_text {
+    margin: 15px;
 }
 
-button {
+.container_btn {
     font: inherit;
     background-color: var(--primary-color);
-    width: 70%;
-    height: 50px;
+    width: 300px;
+    height: 45px;
     font-weight: bolder;
     padding: 5px;
     border-radius: 10px;
-    margin: 0 20px;
+    margin: 0 auto 20px auto;
     cursor: pointer;
     border: 0;
 }
 
-.text-highlight {
+.container_highlight {
     color: var(--primary-color);
     font-weight: bold;
 }

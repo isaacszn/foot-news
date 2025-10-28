@@ -1,9 +1,9 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import LandingPage from './pages/LandingPage'
-import News from './pages/News'
-import Fixtures from './pages/Fixtures'
-import More from './pages/More'
-import NotFound from './pages/NotFound'
+import LandingPage from './pages/LandingPage/LandingPage'
+import News from './pages/News/News'
+import Fixtures from './pages/Fixtures/Fixtures'
+import More from './pages/More/More'
+import NotFound from './pages/NotFound/NotFound'
 
 const App = () => {
         return (

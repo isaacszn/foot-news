@@ -1,0 +1,18 @@
+.container {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+}
+
+.container ul {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    gap: 15%;
+}
+
+.container ul li {
+    cursor: pointer;
+    list-style-type: none;
+}
