@@ -7,9 +7,9 @@ const BottomNav = () => {
     return (
         <div className={styles.container}>
             <ul>
-                <li><img src={home} alt="Home" /></li>
-                <li><img src={fixtures} alt="Fixtures" /></li>
-                <li><img src={more} alt="More" /></li>
+                <div><li><img src={home} alt="Home" /></li>Home</div>
+                <div><li><img src={fixtures} alt="Fixtures" /></li>Ball Fixtures</div>
+                <div><li><img src={more} alt="More" /></li>More</div>
             </ul>
         </div>
     )

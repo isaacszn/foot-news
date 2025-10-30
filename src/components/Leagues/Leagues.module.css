@@ -1,0 +1,19 @@
+.leagues {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10%;
+}
+
+.leagues span {
+    background: var(--primary-color);
+    border-radius: 10px;
+    padding: 8px;
+    cursor: pointer;
+    color: black;
+    font-weight: bold;
+}
+
+.leagues span:hover, .leagues span:active, .leagues span:focus {
+    opacity: 70%;
+}
