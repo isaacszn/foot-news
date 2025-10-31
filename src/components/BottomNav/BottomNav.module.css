@@ -3,29 +3,26 @@
     left: 0;
     bottom: 0;
     width: 100%;
-}
-
-.container ul {
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-around;
     align-items: center;
-    gap: 15%;
+    margin-bottom: 15px;
+    color: var(--text-color);
 }
 
-.container ul li {
-    cursor: pointer;
-    list-style-type: none;
-}
-
-.container ul div {
-    cursor: pointer;
-}
-
-.container ul div li {
+.container_item {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    color: var(--text-color);
+    text-decoration: none;
 }
 
-.container ul div:hover, .container ul div:focus, .container ul div:active {
+.container_item span {
+    margin-top: 10px;
+}
+
+.container_item:hover, .container_item:focus, .container_item:active {
     opacity: 70%;
 }
