@@ -8,15 +8,15 @@ const BottomNav = () => {
     return (
       <div className={styles.container}>
         <Link to="/home" className={styles.container_item}>
-          <img src={home} alt="Home" />
+          <img src={home} alt="Home" width="35px" height="35px" />
           <span>Home</span>
         </Link>
         <Link to="/fixtures" className={styles.container_item}>
-          <img src={fixtures} alt="Fixtures" />
+          <img src={fixtures} alt="Fixtures" width="35px" height="35px" />
           <span>Ball Fixtures</span>
         </Link>
         <Link to="/more" className={styles.container_item}>
-          <img src={more} alt="More" />
+          <img src={more} alt="More" width="35px" height="35px" />
           <span>More</span>
         </Link>
       </div>
