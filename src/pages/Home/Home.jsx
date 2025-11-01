@@ -7,7 +7,7 @@ const Home = () => {
     return (
         <>
          <div>
-            <Header />
+            <Header greeting="Welcome, dear! 👋" />
             <Leagues />
             <News />
             <BottomNav />

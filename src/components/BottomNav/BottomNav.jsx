@@ -11,11 +11,11 @@ const BottomNav = () => {
           <img src={home} alt="Home" width="35px" height="35px" />
           <span>Home</span>
         </NavLink>
-        <NavLink to="/fixtures" className={styles.container_item}>
+        <NavLink to="/fixtures" className={({ isActive }) => (isActive ? styles.nav_active : styles.container_item)}>
           <img src={fixtures} alt="Fixtures" width="35px" height="35px" />
           <span>Ball Fixtures</span>
         </NavLink>
-        <NavLink to="/more" className={styles.container_item}>
+        <NavLink to="/more" className={({ isActive }) => (isActive ? styles.nav_active : styles.container_item)}>
           <img src={more} alt="More" width="35px" height="35px" />
           <span>More</span>
         </NavLink>
